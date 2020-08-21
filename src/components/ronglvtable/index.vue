@@ -1,79 +1,77 @@
 <template>
   <div class="table-list-wrapper">
-    <table cellpadding="0px" cellspacing="0px" class="table-list">
+    <table cellpadding="0px"
+           cellspacing="0px"
+           class="table-list">
       <thead class="table-header">
         <tr class="table-header-contant">
-          <th
-            class="header-item"
-            v-for="(index, item) in tableData[0]"
-            :key="index"
-            :style="{ width: item.width + 'px' }"
-          >
+          <th class="header-item"
+              v-for="(index, item) in tableData[0]"
+              :key="index"
+              :style="{ width: item.width + 'px' }">
             <div class="item">
               <div>{{ item.name }}</div>
-              <div
-                v-if="item.sort"
-                class="arrow"
-                @click="clickSort(item.label)"
-              >
-                <img
-                  class="up"
-                  :src="
+              <div v-if="item.sort"
+                   class="arrow"
+                   @click="clickSort(item.label)">
+                <img class="up"
+                     :src="
                     sort === `up_${item.label}` ? arrow_up_active : arrow_up
                   "
-                  alt=""
-                />
-                <img
-                  class="down"
-                  :src="
+                     alt="" />
+                <img class="down"
+                     :src="
                     sort === `down_${item.label}`
                       ? arrow_down_active
                       : arrow_down
                   "
-                  alt=""
-                />
+                     alt="" />
               </div>
             </div>
           </th>
-          <th class="header-item" style="text-align: center; width: 112px;">
+          <th class="header-item"
+              style="text-align: center; width: 112px;">
             操作
           </th>
         </tr>
       </thead>
       <tbody class="table-body">
-        <tr
-          class="table-body-contant"
-          v-for="(key, item) in tableData[1]"
-          :key="key"
-          @click="clickTr(item)"
-        >
-          <td class="body-item" v-for="(i, k) in bodyList" :key="i">
-            <p
-              class="tag"
-              :class="[
+        <tr class="table-body-contant"
+            v-for="(key, item) in tableData[1]"
+            :key="key"
+            @click="clickTr(item)">
+          <td class="body-item"
+              v-for="(i, k) in bodyList"
+              :key="i">
+            <p class="tag"
+               :class="[
                 style[item[k]],
                 { trace: k == 'trace' },
                 { ellipsis: !style[item[k]] },
-              ]"
-            >
+              ]">
               {{ item[k] }}
             </p>
             <!-- <input type="text" :value="item[k]" class="item-input" disabled='disabled' @input="save"> -->
           </td>
-          <td class="body-operation" :class="{ 'body-look': !editor }">
+          <td class="body-operation"
+              :class="{ 'body-look': !editor }">
             <!-- @click="clicknode(item)" -->
-            <span @click="clicknode(item)" class="look tag" v-if="!editor"
-              >查看</span
-            >
-            <div class="editor" v-else>
-              <div class="delete scale tag" @click="handlerDel(key, item)">
+            <span @click.stop="clicknode(item)"
+                  class="look tag"
+                  v-if="!editor">查看</span>
+            <div class="editor"
+                 v-else>
+              <div class="delete scale tag"
+                   @click.stop="handlerDel(key, item)">
                 删除
               </div>
               <div class="sort">
-                <div class="up scale" @click="handlerUp(key, item)">
+                <div class="up scale"
+                     @click.stop="handlerUp(key, item)">
                   <div class="triangle"></div>
                 </div>
-                <div class="down scale" @click="handlerDown(key, item)">
+                <div class="down scale"
+                     @click.stop="handlerDown(key, item)">
                   <div class="triangle"></div>
                 </div>
               </div>
@@ -106,7 +104,7 @@ export default {
     },
   },
   computed: {
-    bodyList() {
+    bodyList () {
       return this.dataList[0].map((v) => v.label);
     },
     // tableData() {
@@ -121,7 +119,7 @@ export default {
     //     return this.dataList
     // }
   },
-  data() {
+  data () {
     return {
       asc: false,
       desc: true,
@@ -146,13 +144,13 @@ export default {
     };
   },
   methods: {
-    clicknode(item) {
+    clicknode (item) {
       this.$emit("clicknode", item);
     },
-    save() {
+    save () {
       this.$emit("save", JSON.parse(JSON.stringify(this.tableData)));
     },
-    sortData(order, label) {
+    sortData (order, label) {
       this.tableData &&
         this.tableData[1] &&
         this.tableData[1].sort((a, b) => {
@@ -165,22 +163,22 @@ export default {
           }
         });
     },
-    clickSort(label) {
+    clickSort (label) {
       let patt = /^up_/;
       let order = this.sort ? (patt.test(this.sort) ? "down" : "up") : "up";
       this.sort = `${order}_${label}`;
       this.sortData(order, label);
     },
-    handlerDel(key, item) {
+    handlerDel (key, item) {
       this.$emit("delete", key, item);
     },
-    handlerUp(key, item) {
+    handlerUp (key, item) {
       this.$emit("ascing", key, item);
     },
-    handlerDown(key, item) {
+    handlerDown (key, item) {
       this.$emit("descing", key, item);
     },
-    ascing() {
+    ascing () {
       if (this.asc) {
         this.asc = true;
         this.desc = false;
@@ -190,7 +188,7 @@ export default {
       }
       this.$emit("ascing");
     },
-    descing() {
+    descing () {
       if (this.desc) {
         this.desc = true;
         this.asc = false;
@@ -200,19 +198,19 @@ export default {
       }
       this.$emit("descing");
     },
-    clickTr(item) {
+    clickTr (item) {
       this.$emit("clicktr", item);
     },
   },
   watch: {
     dataList: {
-      handler(val) {
+      handler (val) {
         this.tableData = JSON.parse(JSON.stringify(val));
       },
       immediate: true,
     },
   },
-  ready() {},
+  ready () { },
 };
 </script>
 <style lang="less" scoped>
