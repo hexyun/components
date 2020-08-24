@@ -34,11 +34,8 @@ const Components = {
   customselect,
   tablelist,
   ronglvtable,
-<<<<<<< HEAD
   r3checked,
-=======
   datetimepicker
->>>>>>> 71a36e5873212b401fb8f4cc6db9d7b941046cd4
 };
 
 const install = function (Vue, opts = {}) {
