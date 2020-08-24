@@ -3,6 +3,7 @@ import navCate from "./components/navcate/index.vue";
 import r3checked from "./components/navcate/second.vue"; //三级联动多选
 import waterfall from "./components/waterfall/index.vue";
 import area from "./components/area/index.vue";
+import ranktwo from "./components/rankTwo/index.vue"; //二级联动
 import timeline from "./components/timeline/index.vue";
 import datepicker from "./components/datepicker/index.vue";
 import hxkdate from "./components/hxk_date/index.vue";
@@ -21,6 +22,7 @@ const Components = {
   navCate,
   waterfall,
   area,
+  ranktwo,
   timeline,
   datepicker,
   hxkdate,

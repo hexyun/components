@@ -35,6 +35,11 @@ router.map({
       require(["./routers/r3checked.vue"], resolve);
     },
   },
+  "/rankTwo": {
+    component: function (resolve) {
+      require(["./routers/rankTwo.vue"], resolve);
+    },
+  },
   "/area": {
     component: function (resolve) {
       require(["./routers/area.vue"], resolve);
