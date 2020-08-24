@@ -1,8 +1,7 @@
 <template>
   <div class="date-time-picker">
     <div :class="{'date-time-mask':visible}"
-         @click="maskClick"
-         @mousedown="maskClick"></div>
+         @click="cancel"></div>
     <div class="date-time-dialog"
          :class="{'date-time-dialog-show':visible}">
       <div class="date-time-content">
@@ -94,16 +93,13 @@ export default {
       return result;
     },
     getTimeArr () {
-      var arr = [];
+      var arr = [], time = ['00', '30'];
       for (var i = 0; i < 24; i++) {
         if (i < 10) {
           i = '0' + i;
         }
-        for (var j = 0; j < 60; j++) {
-          if (j < 10) {
-            j = '0' + j;
-          }
-          arr.push(i + ':' + j)
+        for (var j = 0; j < time.length; j++) {
+          arr.push(i + ':' + time[j])
         }
       }
       return arr;
@@ -115,9 +111,7 @@ export default {
       if (index === 1) {
         this.seletedTime = data
       }
-    },
-    maskClick () {
-      this.visible = false;
+      this.lastDate = ''
     },
     cancel () {
       if (this.seletedData) {
@@ -148,6 +142,7 @@ export default {
   background: rgba(0, 0, 0, 0.5);
 }
 .date-time-dialog {
+  transform-style: preserve-3d;
   border-radius: 8px 8px 0 0;
   position: fixed;
   bottom: 0;
@@ -173,7 +168,8 @@ export default {
   padding: 6px 36px 16px;
   justify-content: space-evenly;
   position: relative;
-  z-index: 12;
+  z-index: 100000;
+  transform: translateZ(100000px);
   cursor: pointer;
   div {
     flex: 1;

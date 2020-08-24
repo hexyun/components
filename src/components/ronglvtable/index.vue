@@ -7,54 +7,71 @@
         <tr class="table-header-contant">
           <th class="header-item"
               v-for="(index, item) in tableData[0]"
-              :key="index">
+              :key="index"
+              :style="{ width: item.width + 'px' }">
             <div class="item">
-              <div>{{ item.name }} </div>
+              <div>{{ item.name }}</div>
               <div v-if="item.sort"
                    class="arrow"
                    @click="clickSort(item.label)">
                 <img class="up"
-                     :src="sort === `up_${item.label}` ? arrow_up_active : arrow_up"
-                     alt="">
+                     :src="
+                    sort === `up_${item.label}` ? arrow_up_active : arrow_up
+                  "
+                     alt="" />
                 <img class="down"
-                     :src="sort === `down_${item.label}` ? arrow_down_active : arrow_down"
-                     alt="">
+                     :src="
+                    sort === `down_${item.label}`
+                      ? arrow_down_active
+                      : arrow_down
+                  "
+                     alt="" />
               </div>
             </div>
           </th>
           <th class="header-item"
-              style="text-align:center; min-width: 8em">操作</th>
+              style="text-align: center; width: 112px;">
+            操作
+          </th>
         </tr>
       </thead>
       <tbody class="table-body">
         <tr class="table-body-contant"
             v-for="(key, item) in tableData[1]"
-            :key="key">
-
+            :key="key"
+            @click="clickTr(item)">
           <td class="body-item"
               v-for="(i, k) in bodyList"
               :key="i">
             <p class="tag"
-               :class="[style[item[k]], {'trace': k == 'trace'}, {'ellipsis': !style[item[k]]}]">{{ item[k]}}</p>
+               :class="[
+                style[item[k]],
+                { trace: k == 'trace' },
+                { ellipsis: !style[item[k]] },
+              ]">
+              {{ item[k] }}
+            </p>
             <!-- <input type="text" :value="item[k]" class="item-input" disabled='disabled' @input="save"> -->
           </td>
           <td class="body-operation"
-              :class="{'body-look': !editor}">
+              :class="{ 'body-look': !editor }">
             <!-- @click="clicknode(item)" -->
-            <span @click="clicknode(item)"
+            <span @click.stop="clicknode(item)"
                   class="look tag"
                   v-if="!editor">查看</span>
             <div class="editor"
                  v-else>
               <div class="delete scale tag"
-                   @click="handlerDel(key, item)">删除</div>
+                   @click.stop="handlerDel(key, item)">
+                删除
+              </div>
               <div class="sort">
-                <div class="up scale "
-                     @click="handlerUp(key, item)">
+                <div class="up scale"
+                     @click.stop="handlerUp(key, item)">
                   <div class="triangle"></div>
                 </div>
                 <div class="down scale"
-                     @click="handlerDown(key, item)">
+                     @click.stop="handlerDown(key, item)">
                   <div class="triangle"></div>
                 </div>
               </div>
@@ -66,22 +83,29 @@
   </div>
 </template>
 <script>
-import { arrow_up, arrow_up_active, arrow_down, arrow_down_active, up, down } from './img'
+import {
+  arrow_up,
+  arrow_up_active,
+  arrow_down,
+  arrow_down_active,
+  up,
+  down,
+} from "./img";
 export default {
   props: {
     // 表格数据
     dataList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     editor: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     bodyList () {
-      return this.dataList[0].map(v => v.label);
+      return this.dataList[0].map((v) => v.label);
     },
     // tableData() {
     //     if (this.sort) {
@@ -99,7 +123,7 @@ export default {
     return {
       asc: false,
       desc: true,
-      sort: '',
+      sort: "",
       arrow_up: arrow_up,
       arrow_up_active: arrow_up_active,
       arrow_down: arrow_down,
@@ -108,58 +132,61 @@ export default {
       down: down,
       tableData: [],
       style: {
-        '媒体': 'media',
-        '监管': 'supervise',
-        '环境': 'environment',
-        "社会": 'society',
-        '治理': 'govern',
-        '高': 'high',
-        '中': 'middle',
-        '低': 'low'
-      }
-    }
+        媒体: "media",
+        监管: "supervise",
+        环境: "environment",
+        社会: "society",
+        治理: "govern",
+        高: "high",
+        中: "middle",
+        低: "low",
+      },
+    };
   },
   methods: {
     clicknode (item) {
-      this.$emit('clicknode', item)
+      this.$emit("clicknode", item);
     },
     save () {
-      this.$emit('save', JSON.parse(JSON.stringify(this.tableData)))
+      this.$emit("save", JSON.parse(JSON.stringify(this.tableData)));
     },
     sortData (order, label) {
-      this.tableData && this.tableData[1] && this.tableData[1].sort((a, b) => {
-        if (isNaN(a[label]) && !isNaN(Date.parse(a[label]))) {
-          return order === 'up' ? Date.parse(a[label]) - Date.parse(b[label]) : Date.parse(b[label]) - Date.parse(a[label])
-        } else {
-          return order === 'up' ? a[label] - b[label] : b[label] - a[label]
-        }
-      })
+      this.tableData &&
+        this.tableData[1] &&
+        this.tableData[1].sort((a, b) => {
+          if (isNaN(a[label]) && !isNaN(Date.parse(a[label]))) {
+            return order === "up"
+              ? Date.parse(a[label]) - Date.parse(b[label])
+              : Date.parse(b[label]) - Date.parse(a[label]);
+          } else {
+            return order === "up" ? a[label] - b[label] : b[label] - a[label];
+          }
+        });
     },
     clickSort (label) {
-      let patt = /^up_/
-      let order = this.sort ? (patt.test(this.sort) ? 'down' : 'up') : 'up'
-      this.sort = `${order}_${label}`
-      this.sortData(order, label)
-
+      let patt = /^up_/;
+      let order = this.sort ? (patt.test(this.sort) ? "down" : "up") : "up";
+      this.sort = `${order}_${label}`;
+      this.sortData(order, label);
     },
     handlerDel (key, item) {
-      this.$emit('delete', key, item)
+      this.$emit("delete", key, item);
     },
     handlerUp (key, item) {
-      this.$emit('ascing', key, item)
+      this.$emit("ascing", key, item);
     },
     handlerDown (key, item) {
-      this.$emit('descing', key, item)
+      this.$emit("descing", key, item);
     },
     ascing () {
       if (this.asc) {
-        this.asc = true
-        this.desc = false
+        this.asc = true;
+        this.desc = false;
       } else {
-        this.asc = true
-        this.desc = false
+        this.asc = true;
+        this.desc = false;
       }
-      this.$emit('ascing')
+      this.$emit("ascing");
     },
     descing () {
       if (this.desc) {
@@ -169,27 +196,29 @@ export default {
         this.desc = true;
         this.asc = false;
       }
-      this.$emit('descing')
-    }
+      this.$emit("descing");
+    },
+    clickTr (item) {
+      this.$emit("clicktr", item);
+    },
   },
   watch: {
     dataList: {
       handler (val) {
-        this.tableData = JSON.parse(JSON.stringify(val))
+        this.tableData = JSON.parse(JSON.stringify(val));
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
-  ready () {
-  }
-}
+  ready () { },
+};
 </script>
 <style lang="less" scoped>
 .table-list-wrapper {
   width: 100%;
   border: 1px solid transparent;
   border-radius: 6px;
-  overflow: hidden;
+  overflow: auto;
   .table-list {
     table-layout: fixed;
     width: 100%;
@@ -498,4 +527,3 @@ export default {
   text-overflow: ellipsis;
 }
 </style>
-
