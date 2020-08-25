@@ -1,4 +1,4 @@
-import './styles/style.css'
+import "./styles/style.css";
 import navCate from "./components/navcate/index.vue";
 import r3checked from "./components/navcate/second.vue"; //三级联动多选
 import waterfall from "./components/waterfall/index.vue";
@@ -15,9 +15,10 @@ import lanhemenu from "./components/lanhemenu/index.vue";
 import imgscroll from "./components/imgscroll/index.vue";
 import menulist from "./components/menulist/index.vue";
 import customselect from "./components/custom_select/index.vue";
-import tablelist from './components/tablelist/index.vue';
-import ronglvtable from './components/ronglvtable/index.vue';
-import datetimepicker from './components/datetimepicker/index.vue';
+import tablelist from "./components/tablelist/index.vue";
+import ronglvtable from "./components/ronglvtable/index.vue";
+import datetimepicker from "./components/datetimepicker/index.vue";
+
 const Components = {
   navCate,
   waterfall,
@@ -37,7 +38,7 @@ const Components = {
   tablelist,
   ronglvtable,
   r3checked,
-  datetimepicker
+  datetimepicker,
 };
 
 const install = function (Vue, opts = {}) {
@@ -52,5 +53,5 @@ if (typeof window !== "undefined" && window.Vue) {
 }
 
 module.exports = Object.assign(Components, {
-  install
+  install,
 }); // eslint-disable-line no-undef

@@ -10,11 +10,11 @@
     <waterfall
       :loading-img="loadingImg"
       :list="list"
-      :lang="'en'"
+      :lang="en"
       :img-size="imgSize"
       :img-width="294"
-      :none-data='noneData'
-      :gap='8'
+      :none-data="noneData"
+      :gap="8"
       :type="type"
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
@@ -23,7 +23,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       imgSize: {
         live: {
@@ -33,78 +33,79 @@ export default {
         static: {
           width: 280,
           // height: 300
-        }
+        },
       },
-      loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
+      loadingImg:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
       list: [],
-      type: 'pc'
+      type: "pc",
     };
   },
-  created () {
-    console.log('created');
-    this.request()
-
+  created() {
+    console.log("created");
+    this.request();
   },
   methods: {
     //  暴露事件方法
-    selectNode (node) {
+    selectNode(node) {
       console.log(node);
     },
-    scrollBottom () {
+    scrollBottom() {
       console.log("scroll bottom");
       this.getWaterfall();
     },
-    selectItem (item) {
+    selectItem(item) {
       console.log("item", item);
     },
-    change () {
+    change() {
       var self = this;
       this.list = [];
-      setTimeout(function () {
-      }, 1000)
+      setTimeout(function () {}, 1000);
     },
-    changeNoneData () {
+    changeNoneData() {
       this.noneData = !this.noneData;
     },
-    request () {
+    request() {
       $.post({
-        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        url:
+          "https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95",
         data: {},
-        dataType: 'json',
-        success: function (res) { }
+        dataType: "json",
+        success: function (res) {},
       });
     },
     // 抓取数据
-    getWaterfall () {
+    getWaterfall() {
       const self = this;
       $.post({
-        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        url:
+          "https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95",
         data: {},
-        dataType: 'json',
+        dataType: "json",
         success: function (res) {
           if (res.data && res.data.list) {
             let list = res.data.list;
-            list = list.map(item => {
+            list = list.map((item) => {
               item.src = item.coverUrl;
               item.title = item.goodsName;
               item.exhibition_name = item.ownerName;
-              item.status = 'doing';
-              item.realPath = '';
+              item.status = "doing";
+              item.realPath = "";
 
-              const liveTypes = new Set(['LIVE', 'MEETING']);
-              item.type = liveTypes.has(item.goodsType) ? 'live' : 'static';
+              const liveTypes = new Set(["LIVE", "MEETING"]);
+              item.type = liveTypes.has(item.goodsType) ? "live" : "static";
               // delete item.ImageHeight;
               // delete item.ImageWidth;
               return item;
             });
             self.list = self.list.concat(list);
           }
-        }
+        },
       });
-    }
+    },
   },
-  ready () {
+  ready() {
     this.getWaterfall();
 
     let time = 0;

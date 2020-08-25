@@ -1,71 +1,133 @@
 <template>
   <div
     class="vue-waterfall-easy-container"
-    :style="{width: width&&!isMobile ? width+'px' : '', height: parseFloat(height)==height ? height+'px': height}"
-    :class='{none: noneText && noneData}'
+    :style="{
+      width: width && !isMobile ? width + 'px' : '',
+      height: parseFloat(height) == height ? height + 'px' : height,
+    }"
+    :class="{ none: noneText && noneData }"
   >
-  <!-- <button @click="recalculate">布局</button> -->
-    <div class="loading ball-beat" v-show="isPreloading_c" :class="{first:isFirstLoad}">
+    <!-- <button @click="recalculate">布局</button> -->
+    <div
+      class="loading ball-beat"
+      v-show="isPreloading_c"
+      :class="{ first: isFirstLoad }"
+    >
       <div class="dot-box" :isFirstLoad="isFirstLoad">
-        <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
+        <div
+          class="dot"
+          v-for="n in loadingDotCount"
+          :key="n"
+          :style="loadingDotStyle"
+        ></div>
       </div>
     </div>
     <div class="vue-waterfall-easy-scroll">
       <div
         class="vue-waterfall-easy"
-        :style="isMobile? '' :{width: colWidth*cols+'px',left:'50%', marginLeft: -1*colWidth*cols/2 +'px'}"
-        :class="{mobile: isMobile}"
+        :style="
+          isMobile
+            ? ''
+            : {
+                width: colWidth * cols + 'px',
+                left: '50%',
+                marginLeft: (-1 * colWidth * cols) / 2 + 'px',
+              }
+        "
+        :class="{ mobile: isMobile }"
       >
         <div
           class="img-box"
           v-for="(index, v) in imgsArr_c"
           track-by="$index"
           :key="$index"
-          :class="[cardAnimationClass, {__err__: v._error}]"
-          :style="{padding: (isMobile ? mobileGap : gap)/2+'px', width: isMobile ? '' : getColWidth(v)+'px'}"
+          :class="[cardAnimationClass, { __err__: v._error }]"
+          :style="{
+            padding: (isMobile ? mobileGap : gap) / 2 + 'px',
+            width: isMobile ? '' : getColWidth(v) + 'px',
+          }"
           :data-index="$index"
         >
-          <div class="img-inner-box static-box" v-if="v.type==='static'"
-           :class="{fixed: !inValidImgSize(v)}"
-           :style="getImgSize(v)" :data-index="$index">
-            <div class="img-wraper" >
-              <img :src="v.realPath" :height="getImageHeight(v)" alt />
-            </div>
-            <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
-              <p class="title">{{v.title}}</p>
-              <p class="desc">{{v.exhibition_name}}</p>
-            </div>
-          </div>
-
-          <div :style="getImgSize(v)" class="img-inner-box live-box" v-if="v.type==='live'" 
-          :class="{fixed: !inValidImgSize(v)}"
-          :data-index="$index">
+          <div
+            class="img-inner-box static-box"
+            v-if="v.type === 'static'"
+            :class="{ fixed: !inValidImgSize(v) }"
+            :style="getImgSize(v)"
+            :data-index="$index"
+          >
             <div class="img-wraper">
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="doing-tag"  v-if="v.status==='doing'">{{t('doing', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="done-tag"  v-if="v.status==='done'">{{t('over', v.liveType)}}</div>
-            <div :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'" class="nostart-tag"  v-if="v.status==='nostart'">{{t('nostart', v.liveType)}}</div>
-            <template v-if="type === 'pc'">
-            <div class="play-icon"><img src="../images/play.png" alt /></div>
-            <div class="img-info-bg"></div>
-            <div class="img-info">
-              <p class="title">{{v.title}}</p>
-              <p class="desc">{{v.exhibition_name}}</p>
+            <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
+              <p class="title">{{ v.title }}</p>
+              <p class="desc">{{ v.exhibition_name }}</p>
+              <p class="booth" v-if="v.booth_number">
+                {{ t("booth") }}{{ v.booth_number }}
+              </p>
             </div>
+          </div>
+
+          <div
+            :style="getImgSize(v)"
+            class="img-inner-box live-box"
+            v-if="v.type === 'live'"
+            :class="{ fixed: !inValidImgSize(v) }"
+            :data-index="$index"
+          >
+            <div class="img-wraper">
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
+            </div>
+            <div
+              :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+              class="doing-tag"
+              v-if="v.status === 'doing'"
+            >
+              {{ t("doing", v.liveType) }}
+            </div>
+            <div
+              :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+              class="done-tag"
+              v-if="v.status === 'done'"
+            >
+              {{ t("over", v.liveType) }}
+            </div>
+            <div
+              :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
+              class="nostart-tag"
+              v-if="v.status === 'nostart'"
+            >
+              {{ t("nostart", v.liveType) }}
+            </div>
+            <template v-if="type === 'pc'">
+              <div class="play-icon">
+                <img src="../images/play.png" alt />
+              </div>
+              <div class="img-info-bg"></div>
+              <div class="img-info">
+                <p class="title">{{ v.title }}</p>
+                <p class="desc">{{ v.exhibition_name }}</p>
+                <p class="booth" v-if="v.booth_number">
+                  {{ t("booth") }}{{ v.booth_number }}
+                </p>
+              </div>
             </template>
             <template v-else>
-              <div class="play-icon-mobile"><img src="../images/play-mobile.png" alt /></div>
+              <div class="play-icon-mobile">
+                <img src="../images/play-mobile.png" alt />
+              </div>
               <div class="live-info">
-                <p class="title">{{v.title}}</p>
-                <p class="desc">{{v.exhibition_name}}</p>
+                <p class="title">{{ v.title }}</p>
+                <p class="desc">{{ v.exhibition_name }}</p>
+                <p class="booth" v-if="v.booth_number">
+                  {{ t("booth") }}{{ v.booth_number }}
+                </p>
               </div>
             </template>
           </div>
         </div>
       </div>
     </div>
-    <div class="text" v-show='noneText && noneData'>没有更多了…</div>
+    <div class="text" v-show="noneText && noneData">没有更多了…</div>
   </div>
 </template>
 
@@ -75,72 +137,72 @@ export default {
   props: {
     width: {
       // 容器宽度
-      type: Number
+      type: Number,
     },
     height: {
       // 容器高度
-      type: [Number, String]
+      type: [Number, String],
     },
     reachBottomDistance: {
       // 滚动触底距离，触发加载新图片
       type: Number, // selector
-      default: 100 // 默认在最低那一列到底时触发
+      default: 100, // 默认在最低那一列到底时触发
     },
     loadingDotCount: {
       // loading 点数
       type: Number,
-      default: 3
+      default: 3,
     },
     loadingDotStyle: {
-      type: Object
+      type: Object,
     },
     loadingImg: {
       type: String,
-      default: ""
+      default: "",
     },
     gap: {
       // .img-box 间距
       type: Number,
-      default: 0
+      default: 0,
     },
     mobileGap: {
       type: Number,
-      default: 0
+      default: 0,
     },
     maxCols: {
       type: Number,
-      default: 5
+      default: 5,
     },
     imgsArr: {
       type: Array,
-      required: true
+      required: true,
     },
     srcKey: {
       type: String,
-      default: "src"
+      default: "src",
     },
     hrefKey: {
       type: String,
-      default: "href"
+      default: "href",
     },
     imgWidth: {
       type: Number,
-      default: 240
+      default: 240,
     },
     imgSize: {
       type: Object,
-      default () {
+      default() {
         return {
           live: {
             width: 240,
-            height: 400
+            height: 400,
           },
           static: {
             width: 240,
-            height: 300
-          }
-        }
-      }
+            height: 300,
+          },
+        };
+      },
     },
     verticalGap: {
       type: Number,
@@ -148,45 +210,55 @@ export default {
     },
     type: {
       type: String,
-      default: 'pc',
+      default: "pc",
     },
     isRouterLink: {
       type: Boolean,
-      default: false
+      default: false,
     },
     linkRange: {
       // card | img | custom 自定义通过slot自定义链接范围
       type: String,
-      default: "card"
+      default: "card",
     },
     loadingTimeOut: {
       // 预加载事件小于500毫秒就不显示加载动画，增加用户体验
       type: Number,
-      default: 500
+      default: 500,
     },
     cardAnimationClass: {
       type: [String],
-      default: "default-card-animation"
+      default: "default-card-animation",
     },
     enablePullDownEvent: {
       type: Boolean,
-      default: false
+      default: false,
     },
     lang: {
       type: String,
       default: "zh",
     },
     langInfo: {
-      type: Object
+      type: Object,
+      default() {
+        return {
+          zh: {
+            booth: "展位号: ",
+          },
+          en: {
+            booth: "booth Number: ",
+          },
+        };
+      },
     },
     domId: {
-      type: String
+      type: String,
     },
     noneData: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-  data () {
+  data() {
     return {
       msg: "this is from  .vue",
       isMobile: !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i), // 初始化移动端
@@ -204,26 +276,26 @@ export default {
       over: false, // 结束waterfall加载
       scrollEl: null, // 滚动的div
       prev: 0,
-      noneText: false
+      noneText: false,
     };
   },
   computed: {
-    colWidth () {
+    colWidth() {
       // 每一列的宽度
-      let width = this.getTargetWidth() || this.imgWidth
+      let width = this.getTargetWidth() || this.imgWidth;
       return width + this.gap;
     },
-    imgWidth_c () {
+    imgWidth_c() {
       // 对于移动端重新计算图片宽度`
       return this.isMobile
         ? window.innerWidth / 2 - this.mobileGap
-        : (this.getTargetWidth() || this.imgWidth);
+        : this.getTargetWidth() || this.imgWidth;
     },
-    hasLoadingSlot () {
+    hasLoadingSlot() {
       return !!this.$scopedSlots.loading;
-    }
+    },
   },
-  ready () {
+  ready() {
     this.bindClickEvent();
     this.loadingMiddle();
 
@@ -238,7 +310,6 @@ export default {
         this.beginIndex = 0;
         this.waterfall();
       });
-
     });
     if (!this.isMobile && !this.width)
       window.addEventListener("resize", this.response);
@@ -254,20 +325,20 @@ export default {
             const now = Date.now();
             if (dom.scrollHeight - dom.scrollTop - dom.clientHeight <= 100) {
               if (now - self.prev > 500) {
-                self.prev = now
+                self.prev = now;
                 self.$emit("scroll-bottom");
               }
             }
-          }
+          };
         }
-      })
+      });
     }
   },
-  beforeDestroy () {
+  beforeDestroy() {
     window.removeEventListener("resize", this.response);
   },
   watch: {
-    isPreloading (newV, oldV) {
+    isPreloading(newV, oldV) {
       if (newV) {
         setTimeout(() => {
           if (!this.isPreloading) return; // 500毫秒内预加载完图片则不显示加载动画
@@ -277,7 +348,7 @@ export default {
         this.isPreloading_c = false;
       }
     },
-    imgsArr (newV, oldV) {
+    imgsArr(newV, oldV) {
       let self = this;
       if (
         this.imgsArr_c.length > newV.length ||
@@ -285,68 +356,88 @@ export default {
       ) {
         this.reset();
       }
-      this.preload().then(res => {
-        // this.beginIndex = 0;
-        // this.waterfall();
-      }).catch();
-    }
+      this.preload()
+        .then((res) => {
+          // this.beginIndex = 0;
+          // this.waterfall();
+        })
+        .catch();
+    },
   },
   methods: {
-    getTargetWidth () {
-      let width
-      if (this.inValidImgSize['live']) {
-        width = parseFloat(this.imgSize['live'].width)
-      } else if (this.inValidImgSize['static']) {
-        width = parseFloat(this.imgSize['static'].width)
+    t(keypath) {
+      const o = this.langInfo[this.lang] || {};
+      const keys = keypath.split(".");
+      let r = o;
+      let key;
+      for (let i = 0; i < keys.length; i++) {
+        key = keys[i];
+        if (key && typeof r === "object") {
+          r = r[key];
+        }
       }
-      return width
+      return r || "";
     },
-    inValidImgSize (v) {
-      return (!this.imgSize || (typeof this.imgSize === 'object' && !this.imgSize[v.type]))
+    getTargetWidth() {
+      let width;
+      if (this.inValidImgSize["live"]) {
+        width = parseFloat(this.imgSize["live"].width);
+      } else if (this.inValidImgSize["static"]) {
+        width = parseFloat(this.imgSize["static"].width);
+      }
+      return width;
     },
-    getColWidth (v) {
+    inValidImgSize(v) {
+      return (
+        !this.imgSize ||
+        (typeof this.imgSize === "object" && !this.imgSize[v.type])
+      );
+    },
+    getColWidth(v) {
       // imgSize is invalid
       if (this.inValidImgSize(v)) {
-        return this.colWidth
+        return this.colWidth;
       } else {
-        return this.getTargetWidth()
+        return this.getTargetWidth();
       }
     },
-    getImgSize (v) {
+    getImgSize(v) {
       const defaults = {
-        w: this.imgWidth_c + 'px',
-        h: v._height ? v._height + 'px' : false
-      }
+        w: this.imgWidth_c + "px",
+        h: v._height ? v._height + "px" : false,
+      };
       if (this.inValidImgSize(v)) {
-        return defaults
+        return defaults;
       } else {
-        const style = this.imgSize[v.type]
+        const style = this.imgSize[v.type];
         const target = {
-          width: style.width ? parseFloat(style.width) + 'px' : defaults.width,
-          height: style.height ? parseFloat(style.height) + 'px' : defaults.height
-        }
-        return target
+          width: style.width ? parseFloat(style.width) + "px" : defaults.width,
+          height: style.height
+            ? parseFloat(style.height) + "px"
+            : defaults.height,
+        };
+        return target;
       }
     },
-    t (keypath, liveType) {
-      const o = this.langInfo[this.lang] || {}
-      const keys = keypath.split('.')
-      let r = o
-      let key
+    t(keypath, liveType) {
+      const o = this.langInfo[this.lang] || {};
+      const keys = keypath.split(".");
+      let r = o;
+      let key;
       for (let i = 0; i < keys.length; i++) {
-        key = keys[i]
-        if (key && typeof r === 'object') {
-          r = r[key]
+        key = keys[i];
+        if (key && typeof r === "object") {
+          r = r[key];
         }
       }
       // Trick
-      if (liveType === 'MEETING') {
-        r = r.replace('直播', '会议')
+      if (liveType === "MEETING") {
+        r = r.replace("直播", "会议");
       }
-      return r || ''
+      return r || "";
     },
     // 获取真实高度
-    getImageHeight (item) {
+    getImageHeight(item) {
       const { ImageHeight = 0, ImageWidth = 0 } = item;
       // console.log(item.title, ImageWidth, ImageHeight);
       this.imgSize = this.imgSize || {};
@@ -354,17 +445,16 @@ export default {
         const define = this.imgSize[item.type] || { width: this.imgWidth };
         const width = define.width;
         const imageHeight = Math.round(width / (ImageWidth / ImageHeight));
-        return imageHeight + 'px';
+        return imageHeight + "px";
       }
-      return '';
+      return "";
     },
     // ==1== 预加载
-    preload (src, imgIndex) {
+    preload(src, imgIndex) {
       return new Promise((resolve, reject) => {
-
         this.imgsArr.forEach((imgItem, imgIndex) => {
           if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
-          this.imgsArr[imgIndex].realPath = this.loadingImg
+          this.imgsArr[imgIndex].realPath = this.loadingImg;
 
           // 无图时
           if (!imgItem[this.srcKey]) {
@@ -374,7 +464,7 @@ export default {
             // 支持无图模式
             if (this.loadedCount == this.imgsArr.length) {
               this.$emit("preloaded");
-              resolve()
+              resolve();
             }
             return;
           }
@@ -383,29 +473,33 @@ export default {
           oImg.src = imgItem[this.srcKey];
 
           // 图片加载成功处理逻辑
-          const onload = e => {
+          const onload = (e) => {
             // console.log("onload", imgIndex);
             this.loadedCount++;
             // 预加载图片，计算图片容器的高
 
-            if (e.type === 'load') {
-              const imageHeight = Math.round(this.imgWidth_c / (oImg.width / oImg.height));
+            if (e.type === "load") {
+              const imageHeight = Math.round(
+                this.imgWidth_c / (oImg.width / oImg.height)
+              );
               // console.log(e.target, oImg.width, oImg.height, imageHeight);
               this.imgsArr[imgIndex]._height = imageHeight;
               this.imgsArr[imgIndex]._load = true;
             } else {
-              this.imgsArr[imgIndex]._height = this.isMobile ? this.imgWidth_c : this.imgWidth;
+              this.imgsArr[imgIndex]._height = this.isMobile
+                ? this.imgWidth_c
+                : this.imgWidth;
             }
 
             if (e.type == "error") {
               this.imgsArr[imgIndex]._error = true;
               this.$emit("imgError", this.imgsArr[imgIndex]);
-              reject(this.imgsArr[imgIndex])
+              reject(this.imgsArr[imgIndex]);
             }
 
             if (this.loadedCount == this.imgsArr.length) {
               this.$emit("preloaded");
-              resolve()
+              resolve();
             }
             this.imgsArr[imgIndex].realPath = imgItem[this.srcKey];
           };
@@ -413,10 +507,10 @@ export default {
           oImg.onload = onload;
           oImg.onerror = onload;
         });
-      })
+      });
     },
     // ==2== 计算cols
-    calcuCols () {
+    calcuCols() {
       // 列数初始化
       var waterfallWidth = this.width ? this.width : window.innerWidth;
       var cols = parseInt(waterfallWidth / this.colWidth);
@@ -424,13 +518,15 @@ export default {
       return this.isMobile ? 2 : cols > this.maxCols ? this.maxCols : cols;
     },
     // ==3== waterfall 布局
-    waterfall () {
+    waterfall() {
       // console.log('瀑布流布局计算', this.imgsArr.length, this.beginIndex);
       if (!this.imgBoxEls) return;
       var top;
       var left;
       var height;
-      var colWidth = this.isMobile ? this.imgBoxEls[0].offsetWidth : this.colWidth;
+      var colWidth = this.isMobile
+        ? this.imgBoxEls[0].offsetWidth
+        : this.colWidth;
 
       if (this.beginIndex == 0) this.colsHeightArr = [];
 
@@ -444,11 +540,14 @@ export default {
         // 暴力计算
         const item = this.imgsArr[i];
         const imageHeight = parseFloat(this.getImageHeight(item));
-        const liveHeight = this.type === 'mobile' ? 26 : 10;
-        const staticHeight = this.type === 'mobile' ? 48 : 85;
+        const liveHeight = this.type === "mobile" ? 26 : 10;
+        const staticHeight = this.type === "mobile" ? 48 : 85;
 
         if (height < imageHeight) {
-          height = item.type === 'live' ? imageHeight + liveHeight : imageHeight + staticHeight;
+          height =
+            item.type === "live"
+              ? imageHeight + liveHeight
+              : imageHeight + staticHeight;
         }
 
         if (this.verticalGap) {
@@ -473,11 +572,10 @@ export default {
         this.imgBoxEls[i].style.top = top + "px";
         this.beginIndex = this.imgsArr.length; // 排列完之后，新增图片从这个索引开始预加载图片和排列
       }
-
     },
 
     // ==4== resize 响应式
-    response () {
+    response() {
       var old = this.cols;
       this.cols = this.calcuCols();
       if (old === this.cols) return; // 列数不变直接退出
@@ -486,18 +584,20 @@ export default {
       if (this.over) this.setOverTipPos();
     },
     // ==5== 滚动触底事件
-    scrollFn () {
+    scrollFn() {
       // console.log('scroll')
       var self = this;
       if (!this.domId) {
         var scrollEl = this.scrollEl;
-        this.$emit('scroll', scrollEl.scrollTop);
+        this.$emit("scroll", scrollEl.scrollTop);
         var minHeight = Math.min.apply(null, this.colsHeightArr);
-        if (scrollEl.scrollTop + scrollEl.offsetHeight >=
-          scrollEl.scrollHeight - this.reachBottomDistance) {
-          this.noneText = true
+        if (
+          scrollEl.scrollTop + scrollEl.offsetHeight >=
+          scrollEl.scrollHeight - this.reachBottomDistance
+        ) {
+          this.noneText = true;
         } else {
-          this.noneText = false
+          this.noneText = false;
         }
         if (this.isPreloading) return;
         if (
@@ -511,50 +611,50 @@ export default {
       }
     },
     // from: https://github.com/vue-tools/vt-image/blob/master/src/utils.js#L72
-    throttle (fn, delay = 500) {
-      let last
-      let now
-      let timer
-      let context = this
-      let args
+    throttle(fn, delay = 500) {
+      let last;
+      let now;
+      let timer;
+      let context = this;
+      let args;
       return function () {
-        now = new Date().getTime()
-        args = arguments
+        now = new Date().getTime();
+        args = arguments;
         if (last && now - last < delay) {
-          clearTimeout(timer)
+          clearTimeout(timer);
           timer = setTimeout(function () {
-            last = now
-            fn.apply(context, args)
-          }, delay)
+            last = now;
+            fn.apply(context, args);
+          }, delay);
         } else {
-          last = now
-          fn.apply(context, args)
+          last = now;
+          fn.apply(context, args);
         }
-      }
+      };
     },
-    _delayScroll () {
-      return this.throttle(this.scrollFn, 200)()
+    _delayScroll() {
+      return this.throttle(this.scrollFn, 200)();
     },
-    scroll () {
+    scroll() {
       this.scrollEl.addEventListener("scroll", this._delayScroll);
     },
-    waterfallOver () {
+    waterfallOver() {
       this.scrollEl.removeEventListener("scroll", this._delayScroll);
       this.isPreloading = false;
       this.over = true;
       this.setOverTipPos();
     },
-    setOverTipPos () {
+    setOverTipPos() {
       var maxHeight = Math.max.apply(null, this.colsHeightArr);
       this.$nextTick(() => {
         this.$refs.over.style.top = maxHeight + "px";
       });
     },
     // ==6== 点击事件绑定
-    bindClickEvent () {
+    bindClickEvent() {
       this.$el
         .querySelector(".vue-waterfall-easy")
-        .addEventListener("click", e => {
+        .addEventListener("click", (e) => {
           var targetEl = e.target;
           if (e.target.className.indexOf("over") !== -1) return;
           if (targetEl.className.indexOf("img-box") != -1) return;
@@ -566,10 +666,10 @@ export default {
         });
     },
     // ==7== 下拉事件
-    pullDown () {
+    pullDown() {
       var scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
       var startY;
-      scrollEl.addEventListener("touchmove", e => {
+      scrollEl.addEventListener("touchmove", (e) => {
         if (scrollEl.scrollTop === 0) {
           var t = e.changedTouches[0];
           if (!startY) startY = t.pageY;
@@ -580,7 +680,7 @@ export default {
           this.$emit("pullDownMove", pullDownDistance);
         }
       });
-      scrollEl.addEventListener("touchend", e => {
+      scrollEl.addEventListener("touchend", (e) => {
         if (scrollEl.scrollTop === 0) {
           startY = NaN;
           this.$emit("pullDownEnd");
@@ -588,7 +688,7 @@ export default {
       });
     },
     // other
-    loadingMiddle () {
+    loadingMiddle() {
       // 对滚动条宽度造成的不居中进行校正
       var scrollEl = (this.scrollEl = this.$el.querySelector(
         ".vue-waterfall-easy-scroll"
@@ -597,7 +697,7 @@ export default {
       this.$el.querySelector(".loading").style.marginLeft =
         -scrollbarWidth / 2 + "px";
     },
-    reset () {
+    reset() {
       this.imgsArr_c = [];
       this.beginIndex = 0;
       this.loadedCount = 0;
@@ -606,11 +706,11 @@ export default {
       this.scroll();
       this.over = false;
     },
-    recalculate () {
+    recalculate() {
       this.beginIndex = 0;
       this.waterfall();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -768,6 +868,9 @@ export default {
   .desc {
     font-size: 14px;
   }
+  .booth {
+    font-size: 14px;
+  }
 }
 .static-box {
   .img-info {
@@ -786,24 +889,43 @@ export default {
     .desc {
       color: rgba(0, 0, 0, 0.45);
     }
+    .booth {
+      color: rgba(0, 0, 0, 0.45);
+    }
   }
   .live-info {
     box-sizing: border-box;
-    padding: 5px;
     width: 100%;
     height: auto;
+    padding: 14px 6px 15px 14px;
     .title {
-      font-size: 14px;
+      height: 16px;
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 16px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
     }
     .desc {
-      font-size: 12px;
+      font-size: 14px;
       color: rgba(0, 0, 0, 0.45);
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      height: 22px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 22px;
+      margin: 11px 0;
+    }
+    .booth {
+      height: 14px;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.45);
+      line-height: 14px;
     }
   }
 }
@@ -866,6 +988,9 @@ export default {
   .desc {
     color: rgba(255, 255, 255, 0.45);
   }
+  .booth {
+    color: rgba(0, 0, 0, 0.45);
+  }
   .tag {
     position: absolute;
     top: 10px;
@@ -907,4 +1032,3 @@ export default {
   }
 }
 </style>
-

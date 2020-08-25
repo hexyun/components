@@ -13,7 +13,7 @@
       :dom-id="domId"
       :img-size="imgSize"
       :img-width="imgWidth"
-      :none-data='noneData'
+      :none-data="noneData"
       :vertical-gap="verticalGap"
       :type="type"
     >
@@ -34,7 +34,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default () {
+      default() {
         return [];
       },
     },
@@ -48,17 +48,19 @@ export default {
     },
     langInfo: {
       type: Object,
-      default () {
+      default() {
         return {
           zh: {
             nostart: "未开始",
             doing: "进行中",
             over: "已结束",
+            booth: "展位号: ",
           },
           en: {
             nostart: "No Start",
             doing: "Doing",
             over: "Done",
+            booth: "booth Number: ",
           },
         };
       },
@@ -78,44 +80,44 @@ export default {
     },
     noneData: {
       type: Boolean,
-      default: false
+      default: false,
     },
     gap: {
       type: Number,
-      default: 14
+      default: 14,
     },
     verticalGap: {
       type: Number,
-      default: 0
+      default: 0,
     },
     type: {
       type: String,
-      default: 'pc'
-    }
+      default: "pc",
+    },
   },
-  data () {
+  data() {
     return {};
   },
   watch: {},
   computed: {},
-  created () {
-    console.log('this.type', this.type);
+  created() {
+    console.log("this.type", this.type);
   },
-  ready () {
+  ready() {
     this.init();
   },
   methods: {
     // init waterfall instance
-    init () { },
-    scrollBottom () {
+    init() {},
+    scrollBottom() {
       this.$emit("scroll-bottom");
     },
-    selectItem (e, item) {
+    selectItem(e, item) {
       this.$emit("select-item", item);
     },
-    scroll (top) {
-      this.$emit('scroll', top);
-    }
+    scroll(top) {
+      this.$emit("scroll", top);
+    },
   },
 };
 </script>
