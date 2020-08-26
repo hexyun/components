@@ -8,18 +8,9 @@
     :class="{ none: noneText && noneData }"
   >
     <!-- <button @click="recalculate">布局</button> -->
-    <div
-      class="loading ball-beat"
-      v-show="isPreloading_c"
-      :class="{ first: isFirstLoad }"
-    >
+    <div class="loading ball-beat" v-show="isPreloading_c" :class="{ first: isFirstLoad }">
       <div class="dot-box" :isFirstLoad="isFirstLoad">
-        <div
-          class="dot"
-          v-for="n in loadingDotCount"
-          :key="n"
-          :style="loadingDotStyle"
-        ></div>
+        <div class="dot" v-for="n in loadingDotCount" :key="n" :style="loadingDotStyle"></div>
       </div>
     </div>
     <div class="vue-waterfall-easy-scroll">
@@ -61,9 +52,7 @@
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
               <p class="title">{{ v.title }}</p>
               <p class="desc">{{ v.exhibition_name }}</p>
-              <p class="booth" v-if="v.booth_number">
-                {{ t("booth") }}{{ v.booth_number }}
-              </p>
+              <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
             </div>
           </div>
 
@@ -81,23 +70,17 @@
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="doing-tag"
               v-if="v.status === 'doing'"
-            >
-              {{ t("doing", v.liveType) }}
-            </div>
+            >{{ t("doing", v.liveType) }}</div>
             <div
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="done-tag"
               v-if="v.status === 'done'"
-            >
-              {{ t("over", v.liveType) }}
-            </div>
+            >{{ t("over", v.liveType) }}</div>
             <div
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="nostart-tag"
               v-if="v.status === 'nostart'"
-            >
-              {{ t("nostart", v.liveType) }}
-            </div>
+            >{{ t("nostart", v.liveType) }}</div>
             <template v-if="type === 'pc'">
               <div class="play-icon">
                 <img src="../images/play.png" alt />
@@ -106,9 +89,7 @@
               <div class="img-info">
                 <p class="title">{{ v.title }}</p>
                 <p class="desc">{{ v.exhibition_name }}</p>
-                <p class="booth" v-if="v.booth_number">
-                  {{ t("booth") }}{{ v.booth_number }}
-                </p>
+                <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
               </div>
             </template>
             <template v-else>
@@ -118,9 +99,7 @@
               <div class="live-info">
                 <p class="title">{{ v.title }}</p>
                 <p class="desc">{{ v.exhibition_name }}</p>
-                <p class="booth" v-if="v.booth_number">
-                  {{ t("booth") }}{{ v.booth_number }}
-                </p>
+                <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
               </div>
             </template>
           </div>
@@ -752,6 +731,35 @@ export default {
     &.mobile > .img-box {
       width: 50%; // 移动端生效
     }
+    &.mobile .img-wraper > img {
+      border-radius: 4px 4px 0 0;
+    }
+    &.mobile .static-box .live-info {
+      padding: 7px 10px !important;
+      background: rgba(24, 34, 57, 1);
+      line-height: 15px;
+      .desc {
+        color: rgba(255, 255, 255, 0.3);
+        margin: 0;
+        font-size: 12px;
+      }
+      .title {
+        line-height: 18px;
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 7px;
+      }
+    }
+    &.mobile .live-box .live-info {
+      border-radius: 0 0 4px 4px !important;
+      padding: 7px 10px !important;
+      background: rgba(24, 34, 57, 1) !important;
+      .title {
+        font-size: 14px;
+        color: #fff !important;
+        line-height: 21px !important;
+      }
+    }
     & > .img-box.default-card-animation {
       animation: show-card 0.4s;
       transition: left 0.6s, top 0.6s;
@@ -872,6 +880,7 @@ export default {
     font-size: 14px;
   }
 }
+/*pc端样式处理*/
 .static-box {
   .img-info {
     padding: 15px;
@@ -929,6 +938,7 @@ export default {
     }
   }
 }
+/*移动端样式处理*/
 .live-box {
   .img-info-bg {
     position: absolute;
