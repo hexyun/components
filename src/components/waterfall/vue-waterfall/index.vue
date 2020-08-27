@@ -713,6 +713,7 @@ export default {
       display: none;
     }
   }
+  /*移动端样式处理*/
   .vue-waterfall-easy {
     position: absolute;
     width: 100%; // 移动端生效
@@ -758,6 +759,11 @@ export default {
         font-size: 14px;
         color: #fff !important;
         line-height: 21px !important;
+      }
+      .desc {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
     & > .img-box.default-card-animation {
@@ -880,7 +886,7 @@ export default {
     font-size: 14px;
   }
 }
-/*pc端样式处理*/
+/*统一样式处理*/
 .static-box {
   .img-info {
     padding: 15px;
@@ -938,7 +944,6 @@ export default {
     }
   }
 }
-/*移动端样式处理*/
 .live-box {
   .img-info-bg {
     position: absolute;
