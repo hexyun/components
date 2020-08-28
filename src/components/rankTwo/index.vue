@@ -1,7 +1,7 @@
 <template>
   <div :class="{'hex-area':true}" :style="{width:inputWidth}" v-click-out-side="hiddenMenu">
     <div class="area-input" @click="show = !show">
-      <input type="text" placeholder="请选择" disabled :value="selectText" />
+      <input type="text" :placeholder="t('none')" disabled :value="selectText" />
       <svg
         t="1590251416183"
         class="icon"
@@ -95,6 +95,23 @@ export default {
       default() {
         return [];
       }
+    },
+    lang: {
+      type: String,
+      default: "zh",
+    },
+    langInfo: {
+      type: Object,
+      default() {
+        return {
+          zh: {
+            none: '请选择',
+          },
+          en: {
+            none: 'please select',
+          }
+        }
+      }
     }
   },
   data() {
@@ -118,9 +135,22 @@ export default {
     }
   },
   ready() {
-    console.log('this.list', this.list)
+    // console.log('this.list', this.list)
   },
   methods: {
+    t(keypath) {
+      const o = this.langInfo[this.lang] || {}
+      const keys = keypath.split('.')
+      let r = o
+      let key
+      for (let i = 0;i < keys.length;i++) {
+        key = keys[i]
+        if (key && typeof r === 'object') {
+          r = r[key]
+        }
+      }
+      return r || ''
+    },
     // init waterfall instance
     init() {
       // 设置国家列表
@@ -155,7 +185,7 @@ export default {
     setContries(list) {
       this.contries = list;
       this.provinces = [];
-      console.log('object :>> ', list);
+      // console.log('object :>> ', list);
     },
     // 设置省份列表
     setProvinces(id, list) {
@@ -181,7 +211,7 @@ export default {
         data = this.provinces[index];
         this.clearProvinces();
         this.provinces.$set(index, Object.assign({}, data, { selected: true }));
-        console.log('this.provinces', this.provinces)
+        // console.log('this.provinces', this.provinces)
         if (type !== "init") {
           this.$emit("select-node", this.current.country, data);
           // this.reset();

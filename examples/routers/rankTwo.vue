@@ -2,14 +2,15 @@
   <div>
     <button @click="init">init</button>
     <ranktwo
-    v-ref:ranktwo
-    :list="list"
-    :default-data="defaultData"
-    :id="'code'"
-    :linkType="'/'"
-    :name="'value'"
-    @select-node="selectNode"
-    :lang=""en""></ranktwo>
+      v-ref:ranktwo
+      :list="list"
+      :default-data="defaultData"
+      :id="'code'"
+      :linkType="'/'"
+      :name="'value'"
+      @select-node="selectNode"
+      :lang="'en'"
+    ></ranktwo>
   </div>
 </template>
 <script>
@@ -128,7 +129,7 @@ export default {
         "code": "code_8",
         "value": "其他"
       }
-    ]
+      ]
     };
   },
   ready() {
