@@ -9,6 +9,7 @@
       :linkType="'/'"
       :name="'value'"
       :lang="'zh'"
+      @select-node="selectNode"
     ></ranktwo>
   </div>
 </template>
@@ -147,9 +148,8 @@ export default {
       console.log(this.gam);
     },
     //  暴露事件方法
-    selectNode(arr) {
-      this.kk = { ...this.kk, defaultdata: arr }
-      console.log(this.kk)
+    selectNode(country, province) {
+      console.log(country, province)
     },
     getResult() {
       // 返回的国省市

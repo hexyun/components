@@ -205,8 +205,7 @@ export default {
         this.setProvinces(data[this.name], data.children);
         this.current.province = {};
         if (type !== "init") {
-          this.defaultData[0] = data;
-          this.defaultData[1] = {};
+          this.$emit("select-node", data);
         }
       } else {
         data = this.provinces[index];
@@ -214,8 +213,7 @@ export default {
         this.provinces.$set(index, Object.assign({}, data, { selected: true }));
         // console.log('this.provinces', this.provinces)
         if (type !== "init") {
-          this.defaultData[0] = this.current.country;
-          this.defaultData[1] = data;
+          this.$emit("select-node", this.current.country, data);
         }
         this.show = false;
       }
