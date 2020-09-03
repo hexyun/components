@@ -4,12 +4,11 @@
     <ranktwo
       v-ref:ranktwo
       :list="list"
-      :default-data="defaultData"
+      :default-data="source.defaultData"
       :id="'code'"
       :linkType="'/'"
       :name="'value'"
-      @select-node="selectNode"
-      :lang="'en'"
+      :lang="'zh'"
     ></ranktwo>
   </div>
 </template>
@@ -17,16 +16,19 @@
 export default {
   data() {
     return {
-      defaultData: [
-        {
-          "code": "code_2",
-          "value": "渠道经销"
-        },
-        {
-          "code": "code_2_1",
-          "value": "品牌代理商"
-        },
-      ],
+      source: {
+        defaultData: [
+          {
+            "code": "code_2",
+            "value": "渠道经销"
+          },
+          {
+            "code": "code_2_1",
+            "value": "品牌代理商"
+          },
+
+        ],
+      },
       list: [{
         "code": "code_1",
         "value": "食品制造/加工"
@@ -135,16 +137,32 @@ export default {
   ready() {
     this.init();
   },
+  watch: {
+    defaultdata(val) {
+      console.log(val)
+    },
+  },
   methods: {
+    print() {
+      console.log(this.gam);
+    },
     //  暴露事件方法
-    selectNode(country, province, city) {
-      console.log(country, province, city);
+    selectNode(arr) {
+      this.kk = { ...this.kk, defaultdata: arr }
+      console.log(this.kk)
     },
     getResult() {
       // 返回的国省市
     },
     init() {
       this.$refs.ranktwo.init()
+    },
+    tes(e) {
+      console.log('接受值', e)
+      this.gam[0] = xxx
+    },
+    log() {
+      console.log('gam', this.gam)
     }
   }
 };
