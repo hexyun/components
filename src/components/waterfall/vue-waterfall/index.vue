@@ -914,7 +914,6 @@ export default {
     height: auto;
     padding: 14px 6px 15px 14px;
     .title {
-      height: 16px;
       font-size: 16px;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.85);
