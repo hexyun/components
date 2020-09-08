@@ -45,6 +45,7 @@ export default {
       },
       width: 0,
       height: 0,
+      step: 0,
     };
   },
   methods: {
@@ -56,7 +57,10 @@ export default {
     touchStart(e) {
       e = e || event;
       e.preventDefault();
-      this.startDraw(e.targetTouches[0].clientX - this.dom.getBoundingClientRect().left, e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top);
+      this.startDraw(
+        e.targetTouches[0].clientX - this.dom.getBoundingClientRect().left,
+        e.targetTouches[0].clientY - this.dom.getBoundingClientRect().top
+      );
     },
     startDraw(x, y) {
       this.start = { x, y };
@@ -82,6 +86,7 @@ export default {
         this.ctx.lineTo(x, y);
         this.ctx.stroke();
         this.start = { x, y };
+        this.step++;
       }
     },
     mouseUp(e) {
@@ -103,6 +108,7 @@ export default {
     },
     overwrite() {
       this.ctx.clearRect(0, 0, 600, 600);
+      this.step = 0;
     },
     defaultDraw(src) {
       this.$nextTick(() => {
@@ -115,12 +121,13 @@ export default {
         img.onload = function () {
           self.ctx.drawImage(img, 0, 0, self.width, self.height);
           document.body.removeChild(img);
+          self.step = 0;
         };
       });
     },
     exportImg() {
       const base = this.dom.toDataURL("image/png");
-      this.$emit("exportimg", base);
+      this.$emit("exportimg", base, this.step);
     },
   },
   watch: {
