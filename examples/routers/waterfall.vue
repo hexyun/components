@@ -4,7 +4,7 @@
       <div>
 
       </div>
-    </div> -->
+    </div>-->
     <button @click="change">修改</button>
     <button @click="changeNoneData">修改空数据</button>
     <waterfall
@@ -15,6 +15,7 @@
       :img-width="294"
       :none-data="noneData"
       :gap="8"
+      :imgsArr="list"
       :type="type"
       @scroll-bottom="scrollBottom"
       @select-item="selectItem"
@@ -38,13 +39,20 @@ export default {
       loadingImg:
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
-      list: [],
+      list: [{ src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题1", exhibition_name: "展会名称a", booth_number: '展位号I', type: 'static' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题2", exhibition_name: "展会名称B", booth_number: '展位号I', type: 'live' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题3", exhibition_name: "展会名称C", booth_number: '展位号II', type: 'static' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题4", exhibition_name: "展会名称D", booth_number: '展位号III', type: 'live' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题5", exhibition_name: "展会名称E", booth_number: '展位号IIII', type: 'static' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题6", exhibition_name: "展会名称F", booth_number: '展位号X', type: 'live' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题7", exhibition_name: "展会名称G", booth_number: '展位号IX', type: 'live' },],
+
       type: "pc",
     };
   },
   created() {
     console.log("created");
-    this.request();
+    // this.request();
   },
   methods: {
     //  暴露事件方法
@@ -61,7 +69,7 @@ export default {
     change() {
       var self = this;
       this.list = [];
-      setTimeout(function () {}, 1000);
+      setTimeout(function () { }, 1000);
     },
     changeNoneData() {
       this.noneData = !this.noneData;
@@ -72,7 +80,7 @@ export default {
           "https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95",
         data: {},
         dataType: "json",
-        success: function (res) {},
+        success: function (res) { },
       });
     },
     // 抓取数据
