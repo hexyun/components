@@ -1,7 +1,12 @@
 <template>
   <div class="container" id="container">
-    <div class="iframe-box" style="width:100%;height:300px;">
-      <iframe src="//daily.digitalexpo.com/silkroadcg3d/panorama/index.html" frameborder="0" width="100%" height="300"></iframe>
+    <div class="iframe-box" style="width: 100%; height: 300px">
+      <iframe
+        src="//daily.digitalexpo.com/silkroadcg3d/panorama/index.html"
+        frameborder="0"
+        width="100%"
+        height="300"
+      ></iframe>
     </div>
     <div class="waterfall_wrap">
       <waterfall
@@ -10,9 +15,10 @@
         :lang="'zh'"
         :img-size="imgSize"
         :img-width="294"
-        :none-data='noneData'
-        :gap='12'
-        :vertical-gap='10',
+        :none-data="noneData"
+        :gap="12"
+        :vertical-gap="10"
+        ,
         :type="type"
         :lang-info="langInfo"
         @scroll-bottom="scrollBottom"
@@ -24,7 +30,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       imgSize: {
         live: {
@@ -32,9 +38,10 @@ export default {
         },
         static: {
           width: 280,
-        }
+        },
       },
-      loadingImg: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
+      loadingImg:
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
       list: [],
       langInfo: {
@@ -45,87 +52,92 @@ export default {
         },
         en: {
           nostart: "Coming Soon",
-          doing: "Live broadcast in progress",
-          over: "Done",
+          doing: "On-going",
+          over: "End",
         },
       },
-      type: 'mobile'
-    }
+      type: "mobile",
+    };
   },
-  created () {
-    console.log('created');
+  created() {
+    console.log("created");
     this.__time = 0;
     var width = screen.width;
     var columnWidth = (width - 30) / 2 + 0.5;
     this.imgSize = {
       live: { width: columnWidth },
-      static: { width: columnWidth }
-    }
+      static: { width: columnWidth },
+    };
     console.log(JSON.stringify(this.imgSize, null, 2));
     this.$nextTick(() => {
-      document.getElementById('container').style.height = window.innerHeight - 200 + 'px';
+      document.getElementById("container").style.height =
+        window.innerHeight - 200 + "px";
     });
-    this.request()
-
+    this.request();
   },
   methods: {
     //  暴露事件方法
-    selectNode (node) {
+    selectNode(node) {
       console.log(node);
     },
-    scrollBottom () {
+    scrollBottom() {
       console.log("scroll bottom");
       this.getWaterfall();
     },
-    selectItem (item) {
+    selectItem(item) {
       console.log("item", item);
     },
-    scroll (top) {
-      const dom = document.getElementsByTagName('html')[0]
+    scroll(top) {
+      const dom = document.getElementsByTagName("html")[0];
       dom.scrollTop = top;
     },
-    change () {
+    change() {
       var self = this;
       this.list = [];
-      setTimeout(function () {
-      }, 1000)
+      setTimeout(function () {}, 1000);
     },
-    changeNoneData () {
+    changeNoneData() {
       this.noneData = !this.noneData;
     },
-    request () {
+    request() {
       $.post({
-        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        url:
+          "https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95",
         data: {},
-        dataType: 'json',
-        success: function (res) { }
+        dataType: "json",
+        success: function (res) {},
       });
     },
     // 抓取数据
-    getWaterfall () {
+    getWaterfall() {
       this.__time += 1;
       const self = this;
       $.post({
-        url: 'https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95',
+        url:
+          "https://13000.preview.lowcode.com/flow/api/5ee9d1f0ed52eb2a22750f95",
         data: {
-          time: this.__time
+          time: this.__time,
         },
-        dataType: 'json',
+        dataType: "json",
         success: function (res) {
           if (res.data && res.data.list) {
             let list = res.data.list;
-            list = list.map(item => {
+            list = list.map((item) => {
               item.src = item.coverUrl;
               item.title = item.goodsName;
               item.exhibition_name = item.ownerName;
 
-              const statusMap = { '预开始': 'nostart', '进行中': 'doing', '已结束': 'done' };
+              const statusMap = {
+                预开始: "nostart",
+                进行中: "doing",
+                已结束: "done",
+              };
               item.status = statusMap[item.bussState];
-              item.realPath = '';
+              item.realPath = "";
 
-              const liveTypes = new Set(['LIVE', 'MEETING']);
+              const liveTypes = new Set(["LIVE", "MEETING"]);
               // const liveTypes = new Set();
-              item.type = liveTypes.has(item.goodsType) ? 'live' : 'static';
+              item.type = liveTypes.has(item.goodsType) ? "live" : "static";
               item.liveType = item.goodsType;
               // delete item.ImageHeight;
               // delete item.ImageWidth;
@@ -136,11 +148,11 @@ export default {
             }
             self.list = self.list.concat(list);
           }
-        }
+        },
       });
-    }
+    },
   },
-  ready () {
+  ready() {
     this.getWaterfall();
 
     let time = 0;
