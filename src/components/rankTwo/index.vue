@@ -214,7 +214,6 @@ export default {
         // console.log('this.provinces', this.provinces)
         if (type !== "init") {
           this.$emit("select-node", this.current.country, data);
-          // this.reset();
         }
         this.show = false;
       }
