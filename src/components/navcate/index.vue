@@ -16,7 +16,7 @@
           @click="selectLinkMenu(item, 1)"
           class="menu-item"
           :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
-        >{{item.name | subStringName}}</a>
+        >{{item.name}}</a>
       </div>
     </template>
     <!-- level：2 只有二级菜单 -->
@@ -30,7 +30,7 @@
           @click="selectFirstMenu('click',item,$index)"
           @mouseover="selectFirstMenu('hover',item,$index)"
           :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
-        >{{item.name | subStringName}}</a>
+        >{{item.name}}</a>
       </div>
       <div class="second-menu common-scrollbar" v-if="selectedFirst">
         <div class="menu-content">
@@ -41,7 +41,7 @@
             :key="item.id"
             track-by="$index"
             @click="selectLinkMenu(item)"
-          >{{item.name | subStringName}}</a>
+          >{{item.name}}</a>
         </div>
       </div>
     </template>
@@ -56,13 +56,13 @@
           @click="selectFirstMenu('click',item,$index)"
           @mouseover="selectFirstMenu('hover',item,$index)"
           :class="{'menu-item':true,'selected':firstMenu.id === item.id}"
-        >{{item.name | subStringName}}</a>
+        >{{item.name}}</a>
       </div>
       <div class="third-menu common-scrollbar" v-if="selectedFirst">
         <div class="menu-content">
           <div class="third-item" v-for="second in secondList" :key="second.id" track-by="$index">
             <div class="title">
-              <span class="name-content">{{second.name}}</span>:
+              <span class="name-content">{{second.name | subStringName}}</span> :
             </div>
             <div class="list">
               <a
@@ -72,7 +72,7 @@
                 track-by="$index"
                 :class="{'menu-item':true,'selected':thiMenu.id ===item.id}"
                 @click="selectLinkMenu(item, second)"
-              >{{item.name | subStringName}}</a>
+              >{{item.name}}</a>
             </div>
           </div>
         </div>
@@ -86,51 +86,51 @@ import clickOutSide from "../../directives/clickoutside.js";
 export default {
   name: "navCate",
   directives: {
-    clickOutSide
+    clickOutSide,
   },
   props: {
     defaultData: {
       type: Array,
-      default () {
+      default() {
         return [];
-      }
+      },
     },
     list: {
       type: Array,
-      default () {
+      default() {
         return [];
-      }
+      },
     },
     level: {
       type: Number,
-      default: 1
+      default: 1,
     },
     eventType: {
       type: String,
-      default: "click"
-    }
+      default: "click",
+    },
   },
-  data () {
+  data() {
     return {
       selectedFirst: true, // 是否选中一级栏目
       secondList: [],
       firstMenu: {},
       secMenu: {},
-      thiMenu: {}
+      thiMenu: {},
     };
   },
   filters: {
-    subStringName: value => {
-      return value.length > 30 ? `${value.substring(0, 30)}...` : value;
-    }
+    subStringName: (value) => {
+      return value.length > 15 ? `${value.substring(0, 15)}...` : value;
+    },
   },
   computed: {},
-  ready () {
+  ready() {
     this.init();
   },
   methods: {
     // init waterfall instance
-    init () {
+    init() {
       let that = this;
       // 处理menulist格式
       this.list.forEach((element, index) => {
@@ -139,7 +139,7 @@ export default {
       // 设置默认值
       this.setDefaultData();
     },
-    setDefaultData () {
+    setDefaultData() {
       if (this.defaultData.length <= 0) return false;
       let that = this;
       let data = this.defaultData;
@@ -164,7 +164,7 @@ export default {
         }
       }
     },
-    setSelected (list, id) {
+    setSelected(list, id) {
       // 循环设置menulist数据
       let resultIndex = -1;
       list.forEach((element, index) => {
@@ -175,17 +175,21 @@ export default {
       });
       return resultIndex;
     },
-    selectFirstMenu (type, item, index) {
+    selectFirstMenu(type, item, index) {
       if (type != this.eventType) return false;
       this.reset();
-      this.selectedFirst = true;
       this.firstMenu = item;
       let menu = this.list[index];
       menu.selected = true;
       this.list.$set(index, menu);
       this.secondList = menu.children;
+      if (this.secondList) {
+        this.selectedFirst = true;
+      } else {
+        this.selectedFirst = false;
+      }
     },
-    selectLinkMenu (item, second) {
+    selectLinkMenu(item, second) {
       if (second) {
         this.secMenu = second;
         this.thiMenu = item;
@@ -199,7 +203,7 @@ export default {
       this.$emit("select", item, second, this.firstMenu);
       this.reset();
     },
-    reset () {
+    reset() {
       let that = this;
       let list = this.list;
       list.forEach((element, index) => {
@@ -208,14 +212,14 @@ export default {
       });
       // this.selectedFirst = false;
     },
-    mouseLeave () {
+    mouseLeave() {
       if (this.eventType === "hover") this.reset();
     },
-    hiddenMenu () {
+    hiddenMenu() {
       this.$emit("clickoutside");
       this.reset();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -224,7 +228,7 @@ export default {
   height: 400px;
   display: flex;
   &.oh {
-    overflow: hidden;
+    // overflow: hidden;
     border-radius: 0px 0px 8px 8px;
   }
   &.sd {
@@ -242,10 +246,12 @@ export default {
   }
   .first-menu {
     float: left;
-    width: 118px;
+    width: 121px;
     height: 100%;
     overflow-y: auto;
-    background: #f1f1f1;
+    border-right: 1px solid rgba(151, 151, 151, 0.25);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.31);
+    background: #fff;
     &::-webkit-scrollbar {
       background: rgba(0, 0, 0, 0);
       width: 4px;
@@ -256,26 +262,21 @@ export default {
       width: 4px;
     }
     .menu-item {
-      padding: 14px 0;
-      line-height: 18px;
-      text-align: center;
-      font-size: 18px;
+      line-height: 38px;
+      height: 38px;
+      text-align: left;
+      padding-left: 10px;
+      font-size: 16px;
       font-weight: 400;
-      color: rgba(0, 0, 0, 0.64);
+      color: rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       &.selected {
-        background: rgba(255, 255, 255, 1);
-        color: #014bc9;
+        background: rgba(0, 75, 200, 0.09);
+        color: #2f54eb;
+        font-weight: 500;
         position: relative;
-        &::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 4px;
-          height: 18px;
-          background: #014bc9;
-        }
       }
     }
     .first-box {
@@ -304,25 +305,17 @@ export default {
       padding-left: 23px;
       overflow: hidden;
       .menu-item {
-        line-height: 22px;
+        line-height: 12px;
         float: left;
-        font-size: 16px;
-        font-weight: 300;
-        color: rgba(0, 0, 0, 0.85);
-        padding: 4px 14px;
-        width: 92px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-bottom: 7px;
+        font-size: 12px;
+        padding: 11px 10px;
         &:hover {
           font-weight: 400;
           color: #014bc9;
         }
         &.selected {
           font-weight: 400;
-          color: #014bc9;
-          background: rgba(127, 219, 255, 0.2);
+          color: #2f54eb;
           border-radius: 4px;
         }
       }
@@ -335,37 +328,30 @@ export default {
       padding-right: 18px;
       .third-item {
         display: flex;
+        flex-direction: column;
         width: 100%;
-        border-bottom: 1px solid #ebebeb;
-        padding: 17px 0px 11px;
+        border-bottom: 0.5px solid rgba(151, 151, 151, 0.25);
+        padding: 14px 0px 20px;
       }
       .title {
-        width: 90px;
-        margin-right: 11px;
-        font-weight: 400;
-        color: rgba(0, 0, 0, 0.45);
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.85);
         clear: both;
-        overflow: hidden;
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
         padding-top: 2px;
+        padding-bottom: 4px;
         .name-content {
-          float: left;
-          width: 84px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          margin-left: 10px;
         }
       }
       .list {
         flex: 1;
       }
       .menu-item {
-        width: 92px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-weight: 300;
-        height: auto;
-        line-height: inherit;
+        color: rgba(0, 0, 0, 0.45);
+        font-weight: 400;
       }
     }
   }
