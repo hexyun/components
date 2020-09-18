@@ -170,7 +170,7 @@ export default {
     },
     imgSize: {
       type: Object,
-      default() {
+      default () {
         return {
           live: {
             width: 240,
@@ -219,7 +219,7 @@ export default {
     },
     langInfo: {
       type: Object,
-      default() {
+      default () {
         return {
           zh: {
             booth: "展位号: ",
@@ -237,7 +237,7 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       msg: "this is from  .vue",
       isMobile: !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i), // 初始化移动端
@@ -259,22 +259,22 @@ export default {
     };
   },
   computed: {
-    colWidth() {
+    colWidth () {
       // 每一列的宽度
       let width = this.getTargetWidth() || this.imgWidth;
       return width + this.gap;
     },
-    imgWidth_c() {
+    imgWidth_c () {
       // 对于移动端重新计算图片宽度`
       return this.isMobile
         ? window.innerWidth / 2 - this.mobileGap
         : this.getTargetWidth() || this.imgWidth;
     },
-    hasLoadingSlot() {
+    hasLoadingSlot () {
       return !!this.$scopedSlots.loading;
     },
   },
-  ready() {
+  ready () {
     this.bindClickEvent();
     this.loadingMiddle();
 
@@ -313,11 +313,11 @@ export default {
       });
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     window.removeEventListener("resize", this.response);
   },
   watch: {
-    isPreloading(newV, oldV) {
+    isPreloading (newV, oldV) {
       if (newV) {
         setTimeout(() => {
           if (!this.isPreloading) return; // 500毫秒内预加载完图片则不显示加载动画
@@ -327,7 +327,7 @@ export default {
         this.isPreloading_c = false;
       }
     },
-    imgsArr(newV, oldV) {
+    imgsArr (newV, oldV) {
       let self = this;
       if (
         this.imgsArr_c.length > newV.length ||
@@ -344,7 +344,7 @@ export default {
     },
   },
   methods: {
-    t(keypath) {
+    t (keypath) {
       const o = this.langInfo[this.lang] || {};
       const keys = keypath.split(".");
       let r = o;
@@ -357,7 +357,7 @@ export default {
       }
       return r || "";
     },
-    getTargetWidth() {
+    getTargetWidth () {
       let width;
       if (this.inValidImgSize["live"]) {
         width = parseFloat(this.imgSize["live"].width);
@@ -366,13 +366,13 @@ export default {
       }
       return width;
     },
-    inValidImgSize(v) {
+    inValidImgSize (v) {
       return (
         !this.imgSize ||
         (typeof this.imgSize === "object" && !this.imgSize[v.type])
       );
     },
-    getColWidth(v) {
+    getColWidth (v) {
       // imgSize is invalid
       if (this.inValidImgSize(v)) {
         return this.colWidth;
@@ -380,7 +380,7 @@ export default {
         return this.getTargetWidth();
       }
     },
-    getImgSize(v) {
+    getImgSize (v) {
       const defaults = {
         w: this.imgWidth_c + "px",
         h: v._height ? v._height + "px" : false,
@@ -398,7 +398,7 @@ export default {
         return target;
       }
     },
-    t(keypath, liveType) {
+    t (keypath, liveType) {
       const o = this.langInfo[this.lang] || {};
       const keys = keypath.split(".");
       let r = o;
@@ -416,7 +416,7 @@ export default {
       return r || "";
     },
     // 获取真实高度
-    getImageHeight(item) {
+    getImageHeight (item) {
       const { ImageHeight = 0, ImageWidth = 0 } = item;
       // console.log(item.title, ImageWidth, ImageHeight);
       this.imgSize = this.imgSize || {};
@@ -429,7 +429,7 @@ export default {
       return "";
     },
     // ==1== 预加载
-    preload(src, imgIndex) {
+    preload (src, imgIndex) {
       return new Promise((resolve, reject) => {
         this.imgsArr.forEach((imgItem, imgIndex) => {
           if (imgIndex < this.loadedCount) return; // 只对新加载图片进行预加载
@@ -486,10 +486,12 @@ export default {
           oImg.onload = onload;
           oImg.onerror = onload;
         });
+        this.$emit("preloaded");
+        resolve();
       });
     },
     // ==2== 计算cols
-    calcuCols() {
+    calcuCols () {
       // 列数初始化
       var waterfallWidth = this.width ? this.width : window.innerWidth;
       var cols = parseInt(waterfallWidth / this.colWidth);
@@ -497,7 +499,7 @@ export default {
       return this.isMobile ? 2 : cols > this.maxCols ? this.maxCols : cols;
     },
     // ==3== waterfall 布局
-    waterfall() {
+    waterfall () {
       // console.log('瀑布流布局计算', this.imgsArr.length, this.beginIndex);
       if (!this.imgBoxEls) return;
       var top;
@@ -554,7 +556,7 @@ export default {
     },
 
     // ==4== resize 响应式
-    response() {
+    response () {
       var old = this.cols;
       this.cols = this.calcuCols();
       if (old === this.cols) return; // 列数不变直接退出
@@ -563,7 +565,7 @@ export default {
       if (this.over) this.setOverTipPos();
     },
     // ==5== 滚动触底事件
-    scrollFn() {
+    scrollFn () {
       // console.log('scroll')
       var self = this;
       if (!this.domId) {
@@ -590,7 +592,7 @@ export default {
       }
     },
     // from: https://github.com/vue-tools/vt-image/blob/master/src/utils.js#L72
-    throttle(fn, delay = 500) {
+    throttle (fn, delay = 500) {
       let last;
       let now;
       let timer;
@@ -611,26 +613,26 @@ export default {
         }
       };
     },
-    _delayScroll() {
+    _delayScroll () {
       return this.throttle(this.scrollFn, 200)();
     },
-    scroll() {
+    scroll () {
       this.scrollEl.addEventListener("scroll", this._delayScroll);
     },
-    waterfallOver() {
+    waterfallOver () {
       this.scrollEl.removeEventListener("scroll", this._delayScroll);
       this.isPreloading = false;
       this.over = true;
       this.setOverTipPos();
     },
-    setOverTipPos() {
+    setOverTipPos () {
       var maxHeight = Math.max.apply(null, this.colsHeightArr);
       this.$nextTick(() => {
         this.$refs.over.style.top = maxHeight + "px";
       });
     },
     // ==6== 点击事件绑定
-    bindClickEvent() {
+    bindClickEvent () {
       this.$el
         .querySelector(".vue-waterfall-easy")
         .addEventListener("click", (e) => {
@@ -645,7 +647,7 @@ export default {
         });
     },
     // ==7== 下拉事件
-    pullDown() {
+    pullDown () {
       var scrollEl = this.$el.querySelector(".vue-waterfall-easy-scroll");
       var startY;
       scrollEl.addEventListener("touchmove", (e) => {
@@ -667,7 +669,7 @@ export default {
       });
     },
     // other
-    loadingMiddle() {
+    loadingMiddle () {
       // 对滚动条宽度造成的不居中进行校正
       var scrollEl = (this.scrollEl = this.$el.querySelector(
         ".vue-waterfall-easy-scroll"
@@ -676,7 +678,7 @@ export default {
       this.$el.querySelector(".loading").style.marginLeft =
         -scrollbarWidth / 2 + "px";
     },
-    reset() {
+    reset () {
       this.imgsArr_c = [];
       this.beginIndex = 0;
       this.loadedCount = 0;
@@ -685,7 +687,7 @@ export default {
       this.scroll();
       this.over = false;
     },
-    recalculate() {
+    recalculate () {
       this.beginIndex = 0;
       this.waterfall();
     },
