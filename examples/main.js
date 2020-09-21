@@ -119,6 +119,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/video.vue'], resolve)
     }
+  },
+  '/photo': {
+    component: function (resolve) {
+      require(['./routers/photo.vue'], resolve)
+    }
   }
 })
 
