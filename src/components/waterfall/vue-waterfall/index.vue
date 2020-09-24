@@ -505,7 +505,7 @@ export default {
       var top;
       var left;
       var height;
-      var colWidth = this.isMobile
+      var colWidth = this.isMobile && this.imgBoxEls[0]
         ? this.imgBoxEls[0].offsetWidth
         : this.colWidth;
 
