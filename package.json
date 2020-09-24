@@ -19,6 +19,7 @@
     "docs": "webpack --config build/webpack.docs.config.js ",
     "build:prod": "webpack --config build/webpack.dist.prod.config.js && npm run build:style",
     "build": "rm -fr docs dist && npm run build:prod && npm run docs",
+    "buildmove": "rm -fr docs dist && npm run build:prod && npm run docs && cp -r dist/ /Volumes/project/hex/wuwei-hexdo/running/web/seed/public/components && cp -r dist/ /Volumes/project/hex/hexyun/running/web/seed/public/components",
     "svgo": "svgo --enable=removeXMLNS  src/components/icon/icons/*.svg",
     "copy:docs": "cp -r dist/styles docs",
     "copy:example": "cp -r dist/styles examples",
