@@ -41,6 +41,13 @@ export default {
             textAlign: 'center'
           },
           {
+            name: '图片',
+            label: 'img',
+            type: 'img',
+            width: '100',
+            textAlign: 'center'
+          },
+          {
             name: '操作',
             label: 'button',
             width: '250',
@@ -62,7 +69,8 @@ export default {
                 width: '56'
               }
             ],
-            public: true
+            public: true,
+            img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603285411715&di=1d5690171c0635309db3644f2d4f4980&imgtype=0&src=http%3A%2F%2Ft8.baidu.com%2Fit%2Fu%3D1484500186%2C1503043093%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D1280%26h%3D853'
           },
           {
             id: 1,
@@ -129,6 +137,7 @@ export default {
                 width: '56'
               }
             ],
+            img: 'https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1603880124&t=b311689078541e63394a3921cf907dca',
             public: false,
             hsjdhf: 'nfkdnvk'
           }

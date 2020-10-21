@@ -4,41 +4,44 @@
       <div class="table-header">
         <div class="table-column-group">
           <div class="column"
-               :style="{'width': item.width.slice(-1) === '%' ? item.width : item.width + 'px', 'text-align': item.textAlign}"
-               v-for="(index, item) in tableList[0]"
-               :key="index">{{ item.name }}
+              :style="{'width': item.width.slice(-1) === '%' ? item.width : item.width + 'px', 'text-align': item.textAlign}"
+              v-for="(index, item) in tableList[0]"
+              :key="index">{{ item.name }}
           </div>
         </div>
       </div>
       <div class="table-body">
         <div class="table-row-group"
-             v-for="(index, item) in tableList[1]"
-             :key="index">
+            v-for="(index, item) in tableList[1]"
+            :key="index">
           <div class="row"
-               :style="{'width': column.width.slice(-1) === '%' ? column.width : column.width + 'px', 'text-align': column.textAlign}"
-               v-for="(key, column) in tableList[0]"
-               :key="key">
-            <div v-if="column.label !== 'button' && column.type !== 'switch'"
-                 class="row-content"
-                 :class="{
+              :style="{'width': column.width.slice(-1) === '%' ? column.width : column.width + 'px', 'text-align': column.textAlign}"
+              v-for="(key, column) in tableList[0]"
+              :key="key">
+            <div v-if="column.label !== 'button' && column.type !== 'switch' && column.type !== 'img'"
+                class="row-content"
+                :class="{
                   'text-color' : item[column.label] === '驳回'
                 }">{{ item[column.label] }}</div>
             <input class="switch"
-                   v-if="column.label !== 'button' && column.type == 'switch' && item[column.label] || item[column.label] === false"
-                   type="checkbox"
-                   :checked="item[column.label]"
-                   @click="changestatus(item, column.label)">
+                  v-if="column.label !== 'button' && column.type == 'switch' && item[column.label] || item[column.label] === false"
+                  type="checkbox"
+                  :checked="item[column.label]"
+                  @click="changestatus(item, column.label)">
             <div v-if="column.label === 'button'">
               <button class="row-btn"
                       v-for="(idx, btn) in item[column.label]"
                       :key="idx"
                       :style="{
                       'background': btn.background,
-                      'color': btn.color, 
+                      'color': btn.color,
                       'width': btn.width.slice(-1) === '%' ? btn.width : btn.width + 'px',
                       'border-color': btn.bdcolor
                     }"
                       @click="clickbtn(item, btn)">{{ btn.name }}</button>
+            </div>
+            <div v-if='column.label === "img"' class='img-wrap'>
+              <img :src="item[column.label]" alt="">
             </div>
           </div>
         </div>
@@ -98,6 +101,9 @@ export default {
         .row {
           box-sizing: border-box;
           padding-left: 16px;
+          height: 100%;
+          display: flex;
+          align-items: center;
           input[type="checkbox"].switch {
             cursor: pointer;
             outline: none;
@@ -157,6 +163,17 @@ export default {
             line-height: 32px;
             text-align: center;
             margin-right: 8px;
+          }
+          .img-wrap {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            img {
+              max-width: 100%;
+              max-height: 100%;
+            }
           }
         }
       }
