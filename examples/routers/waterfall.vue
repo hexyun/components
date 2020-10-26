@@ -14,6 +14,7 @@
       :img-size="imgSize"
       :img-width="294"
       :none-data="noneData"
+      :lang-info="langInfo"
       :gap="8"
       :imgsArr="list"
       :type="type"
@@ -26,6 +27,21 @@
 export default {
   data() {
     return {
+      langInfo:
+        // {
+
+        //   zh: {
+        //     nostart: "未开始13",
+        //     doing: "进行中23",
+        //     over: "已结束33",
+        //   },
+        //   en: {
+        //     nostart: "No Start1",
+        //     doing: "Doing2",
+        //     over: "Done3",
+        //   },
+        // },
+        { zh: { "nostart": "未开始", "doing": "进行中", "over": "回看", }, en: { "nostart": "Coming Soon", doing: "On Going", over: "Rerun", } },
       imgSize: {
         live: {
           width: 280,
