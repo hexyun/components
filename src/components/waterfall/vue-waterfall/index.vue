@@ -42,14 +42,11 @@
           <div
             class="img-inner-box static-box"
             v-if="v.type === 'static'"
-            :class="{ fixed: !inValidImgSize(v) }"
+            :class="{ fixed: !inValidImgSize(v), yirufangdaImg: type === 'pc' }"
             :style="getImgSize(v)"
             :data-index="$index"
           >
-            <div
-              :class="type === 'pc' ? 'yirufangdaImg' : ''"
-              class="img-wraper"
-            >
+            <div class="img-wraper">
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
@@ -119,12 +116,12 @@
 
           <div
             :style="getImgSize(v)"
-            class="img-inner-box static-box"
+            class="img-inner-box static-box yirufangdaImg"
             v-if="v.type === 'live' && type === 'pc'"
             :class="{ fixed: !inValidImgSize(v) }"
             :data-index="$index"
           >
-            <div class="img-wraper yirufangdaImg">
+            <div class="img-wraper">
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
               <div class="play-icon">
                 <img src="../images/play.png" alt />
@@ -1019,8 +1016,10 @@ export default {
 }
 //图片悬浮放大效果
 .yirufangdaImg {
-  overflow: hidden;
-  img:hover {
+  .img-wraper {
+    overflow: hidden;
+  }
+  .img-wraper > img {
     transform: scale(1, 1);
     -webkit-transition: 0.4s all;
     -o-transition: 0.4s all;
@@ -1028,7 +1027,7 @@ export default {
   }
 }
 .yirufangdaImg:hover {
-  img:hover {
+  .img-wraper > img {
     transform: scale(1.2, 1.2);
   }
 }
