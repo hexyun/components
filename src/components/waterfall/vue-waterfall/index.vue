@@ -1027,6 +1027,8 @@ export default {
   }
 }
 .yirufangdaImg:hover {
+  -webkit-box-shadow: 1px 0px 20px 0px rgba(2, 19, 117, 0.1);
+  box-shadow: 1px 0px 20px 0px rgba(2, 19, 117, 0.1);
   .img-wraper > img {
     transform: scale(1.2, 1.2);
   }
