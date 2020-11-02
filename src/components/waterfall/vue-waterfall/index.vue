@@ -59,7 +59,7 @@
           <div
             :style="getImgSize(v)"
             class="img-inner-box live-box"
-            v-if="v.type === 'live'"
+            v-if="v.type === 'live' && type === 'mobile'"
             :class="{ fixed: !inValidImgSize(v) }"
             :data-index="$index"
           >
@@ -70,18 +70,24 @@
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="doing-tag"
               v-if="v.status === 'doing'"
-            >{{ t("doing", v.liveType) }}</div>
+            >
+              {{ t('doing', v.liveType) }}
+            </div>
             <div
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="done-tag"
               v-if="v.status === 'done'"
-            >{{ t("over", v.liveType) }}</div>
+            >
+              {{ t('over', v.liveType) }}
+            </div>
             <div
               :class="[type === 'mobile'] ? 'mobile-tag' : 'tag'"
               class="nostart-tag"
               v-if="v.status === 'nostart'"
-            >{{ t("nostart", v.liveType) }}</div>
-            <template v-if="type === 'pc'">
+            >
+              {{ t('nostart', v.liveType) }}
+            </div>
+            <!--<template v-if="type === 'pc'">
               <div class="play-icon">
                 <img src="../images/play.png" alt />
               </div>
@@ -89,19 +95,50 @@
               <div class="img-info">
                 <p class="title">{{ v.title }}</p>
                 <p class="desc">{{ v.exhibition_name }}</p>
-                <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
+                <p class="booth" v-if="v.booth_number">
+                  {{ t('booth') }}{{ v.booth_number }}
+                </p>
               </div>
             </template>
-            <template v-else>
-              <div class="play-icon-mobile">
-                <img src="../images/play-mobile.png" alt />
+            <template v-else> -->
+            <div class="play-icon-mobile">
+              <img src="../images/play-mobile.png" alt />
+            </div>
+            <div class="live-info">
+              <p class="title">{{ v.title }}</p>
+              <p class="desc">{{ v.exhibition_name }}</p>
+              <p class="booth" v-if="v.booth_number">
+                {{ t('booth') }}{{ v.booth_number }}
+              </p>
+            </div>
+            <!-- </template> -->
+          </div>
+
+          <div
+            :style="getImgSize(v)"
+            class="img-inner-box static-box"
+            v-if="v.type === 'live' && type === 'pc'"
+            :class="{ fixed: !inValidImgSize(v) }"
+            :data-index="$index"
+          >
+            <div class="img-wraper">
+              <img :src="v.realPath" :height="getImageHeight(v)" alt />
+              <div class="play-icon">
+                <img src="../images/play.png" alt />
               </div>
-              <div class="live-info">
-                <p class="title">{{ v.title }}</p>
-                <p class="desc">{{ v.exhibition_name }}</p>
-                <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
-              </div>
-            </template>
+            </div>
+            <div v-if="v.status" :class="v.status + '-tag'" class="mobile-tag">
+              {{ t(v.status === 'done' ? 'over' : v.status, v.liveType) }}
+            </div>
+
+            <div class="img-info-bg"></div>
+            <div class="live-info">
+              <p class="title">{{ v.title }}</p>
+              <!-- <p class="desc">{{ v.exhibition_name }}</p>
+              <p class="booth" v-if="v.booth_number">
+                {{ t('booth') }}{{ v.booth_number }}
+              </p> -->
+            </div>
           </div>
         </div>
       </div>
@@ -791,6 +828,7 @@ export default {
       }
     }
     .img-wraper {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -945,6 +983,37 @@ export default {
     }
   }
 }
+
+.play-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 55px;
+  height: 55px;
+  transform: translate(-50%, -50%);
+  img {
+    width: 100%;
+  }
+}
+.mobile-tag {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 9px;
+  text-align: center;
+  color: #ffffff;
+  &.nostart-tag {
+    background: rgba(24, 144, 255, 1);
+  }
+  &.doing-tag {
+    background: rgba(250, 84, 28, 1);
+  }
+  &.done-tag {
+    background: rgba(138, 138, 138, 1);
+  }
+}
 .live-box {
   .img-info-bg {
     position: absolute;
@@ -963,17 +1032,6 @@ export default {
     position: absolute;
     left: 20px;
     bottom: 20px;
-  }
-  .play-icon {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 55px;
-    height: 55px;
-    transform: translate(-50%, -50%);
-    img {
-      width: 100%;
-    }
   }
   .play-icon-mobile {
     position: absolute;
@@ -1025,25 +1083,6 @@ export default {
     }
     &.done-tag {
       background: rgba(0, 0, 0, 1);
-    }
-  }
-  .mobile-tag {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    padding: 2px 5px;
-    border-radius: 5px;
-    font-size: 9px;
-    text-align: center;
-    color: #ffffff;
-    &.nostart-tag {
-      background: rgba(24, 144, 255, 1);
-    }
-    &.doing-tag {
-      background: rgba(250, 84, 28, 1);
-    }
-    &.done-tag {
-      background: rgba(138, 138, 138, 1);
     }
   }
 }

@@ -56,12 +56,12 @@ export default {
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC", // 懒加载图片
       noneData: false,
       list: [{ src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题1", exhibition_name: "展会名称a", booth_number: '展位号I', type: 'static' },
-      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题2", exhibition_name: "展会名称B", booth_number: '展位号I', type: 'live' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题2", exhibition_name: "展会名称B", booth_number: '展位号I', type: 'live', status: 'doing', },
       { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题3", exhibition_name: "展会名称C", booth_number: '展位号II', type: 'static' },
-      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题4", exhibition_name: "展会名称D", booth_number: '展位号III', type: 'live' },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题4", exhibition_name: "展会名称D", booth_number: '展位号III', type: 'live', status: 'over', },
       { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题5", exhibition_name: "展会名称E", booth_number: '展位号IIII', type: 'static' },
-      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题6", exhibition_name: "展会名称F", booth_number: '展位号X', type: 'live' },
-      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题7", exhibition_name: "展会名称G", booth_number: '展位号IX', type: 'live' },],
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题6", exhibition_name: "展会名称F", booth_number: '展位号X', type: 'live', status: 'nostart', },
+      { src: 'https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg', title: "标题7", exhibition_name: "展会名称G", booth_number: '展位号IX', type: 'live', status: 'nostart', },],
 
       type: "pc",
     };
