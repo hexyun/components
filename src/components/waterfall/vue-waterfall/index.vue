@@ -46,7 +46,10 @@
             :style="getImgSize(v)"
             :data-index="$index"
           >
-            <div class="img-wraper">
+            <div
+              :class="type === 'pc' ? 'yirufangdaImg' : ''"
+              class="img-wraper"
+            >
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
             </div>
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
@@ -121,7 +124,7 @@
             :class="{ fixed: !inValidImgSize(v) }"
             :data-index="$index"
           >
-            <div class="img-wraper">
+            <div class="img-wraper yirufangdaImg">
               <img :src="v.realPath" :height="getImageHeight(v)" alt />
               <div class="play-icon">
                 <img src="../images/play.png" alt />
@@ -1012,6 +1015,21 @@ export default {
   }
   &.done-tag {
     background: rgba(138, 138, 138, 1);
+  }
+}
+//图片悬浮放大效果
+.yirufangdaImg {
+  overflow: hidden;
+  img:hover {
+    transform: scale(1, 1);
+    -webkit-transition: 0.4s all;
+    -o-transition: 0.4s all;
+    transition: 0.4s all;
+  }
+}
+.yirufangdaImg:hover {
+  img:hover {
+    transform: scale(1.2, 1.2);
   }
 }
 .live-box {
