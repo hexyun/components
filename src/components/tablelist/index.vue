@@ -3,45 +3,103 @@
     <div class="table-list">
       <div class="table-header">
         <div class="table-column-group">
-          <div class="column"
-              :style="{'width': item.width.slice(-1) === '%' ? item.width : item.width + 'px', 'text-align': item.textAlign}"
-              v-for="(index, item) in tableList[0]"
-              :key="index">{{ item.name }}
+          <div
+            class="column"
+            :style="{
+              width:
+                item.width.slice(-1) === '%' ? item.width : item.width + 'px',
+              'text-align': item.textAlign,
+            }"
+            v-for="(index, item) in tableList[0]"
+            :key="index"
+          >
+            {{ item.name }}
           </div>
         </div>
       </div>
       <div class="table-body">
-        <div class="table-row-group"
-            v-for="(index, item) in tableList[1]"
-            :key="index">
-          <div class="row"
-              :style="{'width': column.width.slice(-1) === '%' ? column.width : column.width + 'px', 'text-align': column.textAlign}"
-              v-for="(key, column) in tableList[0]"
-              :key="key">
-            <div v-if="column.label !== 'button' && column.type !== 'switch' && column.type !== 'img'"
-                class="row-content"
-                :class="{
-                  'text-color' : item[column.label] === '驳回'
-                }">{{ item[column.label] }}</div>
-            <input class="switch"
-                  v-if="column.label !== 'button' && column.type == 'switch' && item[column.label] || item[column.label] === false"
-                  type="checkbox"
-                  :checked="item[column.label]"
-                  @click="changestatus(item, column.label)">
-            <div v-if="column.label === 'button'">
-              <button class="row-btn"
-                      v-for="(idx, btn) in item[column.label]"
-                      :key="idx"
-                      :style="{
-                      'background': btn.background,
-                      'color': btn.color,
-                      'width': btn.width.slice(-1) === '%' ? btn.width : btn.width + 'px',
-                      'border-color': btn.bdcolor
-                    }"
-                      @click="clickbtn(item, btn)">{{ btn.name }}</button>
+        <div
+          class="table-row-group"
+          v-for="(index, item) in tableList[1]"
+          :key="index"
+        >
+          <div
+            class="row"
+            style="position: relative"
+            :style="{
+              width:
+                column.width.slice(-1) === '%'
+                  ? column.width
+                  : column.width + 'px',
+              'text-align': column.textAlign,
+            }"
+            v-for="(key, column) in tableList[0]"
+            :key="key"
+          >
+            <span
+              v-if="key === 0 && item.tag.show"
+              :style="[
+                {
+                  width: '20px',
+                  height: '18px',
+                  background: '#e69326',
+                  borderRadius: '0px 0px 3px 3px',
+                  position: 'absolute',
+                  fontSize: '12px',
+                  lineHeight: '18px',
+                  textAlign: 'center',
+                  color: '#fff',
+                  left: '0',
+                  top: '0',
+                },
+                item.tag.style,
+              ]"
+              >{{ key === 0 ? item.tag.text : "" }}</span
+            >
+            <div
+              v-if="
+                column.label !== 'button' &&
+                column.type !== 'switch' &&
+                column.type !== 'img'
+              "
+              class="row-content"
+              :class="{
+                'text-color': item[column.label] === '驳回',
+              }"
+            >
+              {{ item[column.label] }}
             </div>
-            <div v-if='column.label === "img"' class='img-wrap'>
-              <img :src="item[column.label]" alt="">
+            <input
+              class="switch"
+              v-if="
+                (column.label !== 'button' &&
+                  column.type == 'switch' &&
+                  item[column.label]) ||
+                item[column.label] === false
+              "
+              type="checkbox"
+              :checked="item[column.label]"
+              @click="changestatus(item, column.label)"
+            />
+            <div v-if="column.label === 'button'">
+              <button
+                class="row-btn"
+                v-for="(idx, btn) in item[column.label]"
+                :key="idx"
+                :style="{
+                  background: btn.background,
+                  color: btn.color,
+                  width:
+                    btn.width.slice(-1) === '%' ? btn.width : btn.width + 'px',
+                  'border-color': btn.bdcolor,
+                }"
+                @click="clickbtn(item, btn)"
+              >
+                {{ btn.name }}
+              </button>
+            </div>
+            <div v-if="column.label === 'img'" class="img-wrap">
+              <img :src="item[column.label]" alt="" />
             </div>
           </div>
         </div>
@@ -51,23 +109,23 @@
 </template>
 <script>
 export default {
-  name: 'tablelist',
+  name: "tablelist",
   props: {
     tableList: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   methods: {
-    changestatus (data, type) {
-      data[type] = !data[type]
-      this.$emit('changestatus', data);
+    changestatus(data, type) {
+      data[type] = !data[type];
+      this.$emit("changestatus", data);
     },
-    clickbtn (data, btn) {
-      this.$emit('clickbtn', data, btn);
-    }
-  }
-}
+    clickbtn(data, btn) {
+      this.$emit("clickbtn", data, btn);
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .table-wrapper {
@@ -168,8 +226,8 @@ export default {
             width: 100%;
             height: 100%;
             display: flex;
-            justify-content:center;
-            align-items:center;
+            justify-content: center;
+            align-items: center;
             img {
               max-width: 100%;
               max-height: 100%;
