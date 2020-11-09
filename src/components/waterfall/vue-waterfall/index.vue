@@ -51,9 +51,15 @@
             </div>
             <div :class="[type === 'mobile'] ? 'live-info' : 'img-info'">
               <p class="title">{{ v.title }}</p>
-              <p class="desc">{{ v.exhibition_name }}</p>
+              <p class="desc">
+                <img :src="v.exhibition_time" class="icon" v-if="v.exhibition_time" alt />
+                {{ v.exhibition_name }}
+              </p>
               <p class="booth" v-if="v.booth_number">{{ t("booth") }}{{ v.booth_number }}</p>
-              <p class="address" v-if="v.address">{{ v.address }}</p>
+              <p class="address" v-if="v.address">
+                <img :src="v.addressLogo" class="icon" v-if="v.addressLogo" alt />
+                {{ v.address }}
+              </p>
             </div>
           </div>
 
@@ -101,9 +107,15 @@
             </div>
             <div class="live-info">
               <p class="title">{{ v.title }}</p>
-              <p class="desc">{{ v.exhibition_name }}</p>
+              <p class="desc">
+                <img :src="v.exhibition_time" class="icon" v-if="v.exhibition_time" alt />
+                {{ v.exhibition_name }}
+              </p>
               <p class="booth" v-if="v.booth_number">{{ t('booth') }}{{ v.booth_number }}</p>
-              <p class="address" v-if="v.address">{{ v.address }}</p>
+              <p class="address" v-if="v.address">
+                <img :src="v.addressLogo" v-if="v.addressLogo" class="icon" alt />
+                {{ v.address }}{{ v.address }}
+              </p>
             </div>
             <!-- </template> -->
           </div>
@@ -983,6 +995,10 @@ export default {
       font-size: 14px;
       color: rgba(0, 0, 0, 0.1);
       line-height: 21px;
+    }
+    .icon {
+      width: 10px;
+      height: 12px;
     }
   }
 }

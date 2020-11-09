@@ -67,10 +67,15 @@ export default {
           booth_number: "展位号I",
           type: "static",
           address: "上海市徐汇区龙腾大道2555号龙腾大道2555号",
+          addressLogo:
+            "https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg",
+          exhibition_time:
+            "https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg",
         },
         {
           src:
             "https://hexyun.oss-cn-beijing.aliyuncs.com/resource/5f0411728a074a0a54e29571/4bb15d4e56813c1603dce80aedb172fb.jpg",
+
           title: "标题2",
           exhibition_name: "展会名称B",
           booth_number: "展位号I",
