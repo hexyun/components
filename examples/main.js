@@ -124,6 +124,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/photo.vue'], resolve)
     }
+  },
+  '/table': {
+    component: function (resolve) {
+      require(['./routers/custom_table.vue'], resolve)
+    }
   }
 })
 

@@ -1,7 +1,7 @@
 /*
  * @Author: yzf
  * @Date: 2020-08-31 14:54:53
- * @LastEditTime: 2020-09-21 11:51:24
+ * @LastEditTime: 2020-12-21 11:05:06
  * @LastEditors: yzf
  * @Description: 这是文件
  * @FilePath: /alex/Volumes/project/hex/components/src/index.js
@@ -29,6 +29,7 @@ import ronglvtable from './components/ronglvtable/index.vue'
 import datetimepicker from './components/datetimepicker/index.vue'
 import videorecorder from './components/videorecorder/index.vue'
 import photorecorder from './components/photorecorder/index.vue'
+import customtable from './components/custom_table/index.vue'
 
 const Components = {
   navCate,
@@ -51,7 +52,8 @@ const Components = {
   r3checked,
   datetimepicker,
   videorecorder,
-  photorecorder
+  photorecorder,
+  customtable
 }
 
 const install = function (Vue, opts = {}) {
