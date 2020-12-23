@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:53:14
- * @LastEditTime: 2020-12-23 16:51:30
+ * @LastEditTime: 2020-12-23 17:07:00
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/src/components/custom_table/index.vue
@@ -391,6 +391,11 @@ export default {
   transition: .2s;
   * {
     flex-shrink: 0;
+  }
+  .fixed {
+    .content {
+      border-right: 1px solid #000;
+    }
   }
   .normal {
     flex-grow: 1;

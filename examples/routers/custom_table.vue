@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:52:25
- * @LastEditTime: 2020-12-23 16:58:21
+ * @LastEditTime: 2020-12-23 17:06:03
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/examples/routers/custom_table.vue
@@ -9,16 +9,19 @@
 -->
 <template>
   <div class="custom_table_wrap">
-    <button @click='sortData'>排序</button>
-    <button @click='add(1)'>添加列</button>
-    <button @click='add(2)'>添加行</button>
-    <input type="text" v-model='text'>
-    <button @click='changeShow'>更改显示隐藏,输入框输入字段</button>
-    <button @click='setLineHeight'>设置行高,输入框输入数字</button>
-    <button @click='setFieldName'>设置字段名,输入框输入字段 字段名(name name1)</button>
-    <button @click='setTableSize'>设置表格宽高,输入框输入宽 高(1000 500)</button>
-    <button @click='setCheckedData'>修改选中数据,输入框属性 属性值(name namesss)</button>
-    <button @click='filterData'>根据条件筛选数据,输入框属性 属性值(name namesss)</button>
+    <div class='btns'>
+      <button @click='sortData'>排序</button>
+      <button @click='add(1)'>添加列</button>
+      <button @click='add(2)'>添加行</button>
+      <input type="text" v-model='text' placeholder='这是输入框'>
+      <button @click='clear'>清空输入框</button>
+      <button @click='changeShow'>更改显示隐藏,输入框输入字段(name)</button>
+      <button @click='setLineHeight'>设置行高,输入框输入数字(20)</button>
+      <button @click='setFieldName'>设置字段名,输入框输入字段 字段名(name name1)</button>
+      <button @click='setTableSize'>设置表格宽高,输入框输入宽 高(1000 500)</button>
+      <button @click='setCheckedData'>修改选中数据,输入框属性 属性值(name namesss)</button>
+      <button @click='filterData'>根据条件筛选数据,输入框属性 属性值(name namesss)</button>
+    </div>
     <customtable
     v-ref:customtable
     :data='data'
@@ -62,7 +65,7 @@ export default {
         showname: 'job',
         width: 100,
         show: true,
-        fixed: true,
+        fixed: false,
         type: 'text',
         editType: 'inp'
       },{
@@ -73,9 +76,17 @@ export default {
         fixed: false,
         type: 'text',
         editType: 'inp'
+      },{
+        field: 'value',
+        showname: 'value',
+        width: 200,
+        show: true,
+        fixed: false,
+        type: 'text',
+        editType: 'inp'
       }],
-      w: 1000,
-      h: 500,
+      w: 600,
+      h: 300,
       // test
       selected: [],
       onoff: false,
@@ -156,6 +167,9 @@ export default {
         const data = this.text.split(' ')
         this.data = this.allData.filter(item => item[data[0]] === data[1])
       }
+    },
+    clear () {
+      this.text = ''
     }
   },
   ready () {
@@ -181,6 +195,13 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.custom_table_wrap {
+  display: flex;
+  .btns {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+  }
+}
 </style>
