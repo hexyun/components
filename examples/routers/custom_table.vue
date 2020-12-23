@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:52:25
- * @LastEditTime: 2020-12-22 10:44:48
+ * @LastEditTime: 2020-12-23 16:58:21
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/examples/routers/custom_table.vue
@@ -13,14 +13,25 @@
     <button @click='add(1)'>添加列</button>
     <button @click='add(2)'>添加行</button>
     <input type="text" v-model='text'>
-    <button @click='setLineHeight'>设置行高</button>
+    <button @click='changeShow'>更改显示隐藏,输入框输入字段</button>
+    <button @click='setLineHeight'>设置行高,输入框输入数字</button>
+    <button @click='setFieldName'>设置字段名,输入框输入字段 字段名(name name1)</button>
+    <button @click='setTableSize'>设置表格宽高,输入框输入宽 高(1000 500)</button>
+    <button @click='setCheckedData'>修改选中数据,输入框属性 属性值(name namesss)</button>
+    <button @click='filterData'>根据条件筛选数据,输入框属性 属性值(name namesss)</button>
     <customtable
+    v-ref:customtable
     :data='data'
     :fields='fields'
     :w='w'
     :h='h'
+    @showfillscreenitem='showFillScreenItem'
+    @checkeddatachange='checkeddatachange'
     >
     </customtable>
+    <div>
+      全屏展示:{{showfillscreenitem && showfillscreenitem.name}}
+    </div>
   </div>
 </template>
 
@@ -29,37 +40,38 @@ export default {
   data () {
     return {
       data: [],
+      allData: [],
       fields: [{
         field: 'name',
+        showname: 'name',
         width: 100,
         show: true,
         fixed: true,
         type: 'text',
-        defaultType: 'text',
         editType: 'inp'
       },{
         field: 'age',
+        showname: 'age',
         width: 100,
         show: true,
         fixed: false,
         type: 'text',
-        defaultType: 'text',
         editType: 'inp'
       },{
         field: 'job',
+        showname: 'job',
         width: 100,
         show: true,
         fixed: true,
         type: 'text',
-        defaultType: 'text',
         editType: 'inp'
       },{
         field: 'content',
+        showname: 'content',
         width: 100,
         show: true,
         fixed: false,
         type: 'text',
-        defaultType: 'text',
         editType: 'inp'
       }],
       w: 1000,
@@ -68,7 +80,9 @@ export default {
       selected: [],
       onoff: false,
       num: 101,
-      text: ''
+      text: '',
+      showfillscreenitem: null,
+      checkedData: []
     }
   },
   methods: {
@@ -84,10 +98,12 @@ export default {
       if (type === 1) {
         this.fields.push({
           field: 'add' + this.num,
+          showname: 'add' + this.num,
           width: 100,
           show: true,
-          fixed: this.num % 2 === 0,
-          type: 'text'
+          fixed: this.num % 4 === 0,
+          type: 'text',
+          editType: 'inp'
         })
       } else {
         const i = this.num
@@ -108,22 +124,58 @@ export default {
         item.height = (this.text*1)
         return item
       })
+    },
+    changeShow () {
+      const data = this.fields.find(item => item.field === this.text)
+      data.show = !data.show
+    },
+    setFieldName () {
+      const field = this.text.split(' ')
+      const data = this.fields.find(item => item.field === field[0])
+      data.showname = field[1]
+    },
+    setTableSize () {
+      const data = this.text.split(' ')
+      this.w = data[0] * 1
+      this.h = data[1] * 1
+    },
+    showFillScreenItem (item) {
+      this.showfillscreenitem = item
+    },
+    checkeddatachange (data) {
+      this.checkedData = data
+    },
+    setCheckedData () {
+      const data = this.text.split(' ')
+      this.checkedData.forEach(item => item[data[0]] = data[1])
+    },
+    filterData () {
+      if (this.text === '') {
+        this.data = this.allData
+      } else {
+        const data = this.text.split(' ')
+        this.data = this.allData.filter(item => item[data[0]] === data[1])
+      }
     }
   },
   ready () {
     this.$nextTick(() => {
       setTimeout(()=> {
-        for (let i = 0; i < 100; i++) {
-          this.data.push({
+        for (let i = 0; i < 10; i++) {
+          this.allData.push({
             id: i,
             height: 30,
             name: `name${i}`,
             age: `age${i}`,
             job: `job${i}`,
-            content: `content${i}`
+            content: `content${i}`,
+            value: `value${i}`,
+            checked: false
           })
         }
+        this.data = this.allData
       })
+      // console.log(this.$refs.customtable)
     })
   }
 }

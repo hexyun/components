@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:53:14
- * @LastEditTime: 2020-12-22 10:47:13
+ * @LastEditTime: 2020-12-23 16:51:30
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/src/components/custom_table/index.vue
@@ -13,8 +13,8 @@
   >
     <div class="fixed">
       <div class="head tr">
-        <div class="td first">
-          <input type="checkbox">
+        <div class="td first" @click='checkAll'>
+          {{checkAllStatus}}
         </div>
         <div
           class="td"
@@ -26,23 +26,26 @@
             {transition: moveXOnOff && startIdx !== idx ? '.2s' : 'none'}
           ]"
           @mousedown="moveXDown($event, idx, 'fixed')">
-          {{field.field}}
+          {{field.showname}}
           <span @mousedown.stop='resizeDown($event, field)'></span>
         </div>
       </div>
       <div class="content">
         <div class="tr"
+          :class='{selectedRow:selectedData == item.id}'
           v-for='(idx, item) in data'
           :key='idx'
           :style='[
             {height: item.height + "px"},
             styY(idx)
           ]'>
-          <div class="td first" @mousedown="moveYDown($event, idx)">
+          <div class="td first" @mousedown="moveYDown($event, idx)" @click="selectRow(item)">
+            <input type="checkbox" v-model='item.checked'>
             {{idx + 1}}
           </div>
           <div
             class="td"
+            :class="{selected: selectedField == field.field && selectedData == item.id}"
             v-for="(i, field) in fixed"
             :key='field.field'
             :val='field'
@@ -51,8 +54,14 @@
               styX(i, 'fixed'),
               {transition: moveXOnOff && startIdx !== i ? '.2s' : 'none'}
             ]"
-            @click='componentClick(item, field)'>
-            <component :is='field.type' :item='item' :field='field' :idx='i'></component>
+            @click='componentClick(item, field)'
+            @dblclick="dblClick(item, field)">
+            <template v-if='editField != field.field || editData != item.id'>
+              <component :is='field.type' :item='item' :field='field' :idx='i' @clearedit='clearedit'></component>
+            </template>
+            <template v-else>
+              <component :is='field.editType' :item='item' :field='field' :idx='i' @clearedit='clearedit'></component>
+            </template>
           </div>
         </div>
       </div>
@@ -69,13 +78,14 @@
             {transition: moveXOnOff && startIdx !== idx ? '.2s' : 'none'}
           ]"
           @mousedown="moveXDown($event, idx, 'normal')">
-          {{field.field}}
+          {{field.showname}}
           <span @mousedown.stop='resizeDown($event, field)'></span>
         </div>
       </div>
       <div class="content">
         <div
         class="tr"
+        :class='{selectedRow:selectedData == item.id}'
         v-for='(idx, item) in data'
         :key='idx'
         :style='[
@@ -84,6 +94,7 @@
         ]'>
           <div
             class="td"
+            :class="{selected: selectedField == field.field && selectedData == item.id}"
             v-for="(i, field) in normal"
             :key='field.field'
             :style="[
@@ -91,8 +102,14 @@
               styX(i, 'normal'),
               {transition: moveXOnOff && startIdx !== i ? '.2s' : 'none'}
             ]"
-            @click='componentClick(item, field)'>
-            <component :is='field.type' :item='item' :field='field' :idx='i'></component>
+            @click='componentClick(item, field)'
+            @dblclick="dblClick(item, field)">
+            <template v-if='editField != field.field || editData != item.id'>
+              <component :is='field.type' :item='item' :field='field' :idx='i' @clearedit='clearedit'></component>
+            </template>
+            <template v-else>
+              <component :is='field.editType' :item='item' :field='field' :idx='i' @clearedit='clearedit'></component>
+            </template>
           </div>
         </div>
       </div>
@@ -199,6 +216,9 @@ export default {
         }
         return {}
       }
+    },
+    checkAllStatus () {
+      return this.checkDate.length === this.data.length ? 'checked' : this.checkDate.length === 0 ? 'none' : 'half'
     }
   },
   data () {
@@ -215,7 +235,10 @@ export default {
       startY: 0,
       nowY: 0,
       selectedField: null,
-      selectedData: null
+      selectedData: null,
+      editField: null,
+      editData: null,
+      checkDate: []
     }
   },
   methods: {
@@ -304,6 +327,34 @@ export default {
     componentClick (data, field) {
       this.selectedField = field.field
       this.selectedData = data.id
+    },
+    dblClick (data, field) {
+      this.editField = field.field
+      this.editData = data.id
+    },
+    clearedit () {
+      this.editField = null
+      this.editData = null
+    },
+    selectRow (item) {
+      this.$emit('showfillscreenitem', item)
+    },
+    checkAll () {
+      if (this.checkAllStatus === 'checked') {
+        this.data.forEach(item => item.checked = false)
+      } else {
+        this.data.forEach(item => item.checked = true)
+      }
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler (n) {
+        const data = this.data.filter(item=>item.checked)
+        this.checkDate = data
+        this.$emit('checkeddatachange', data)
+      }
     }
   },
   components: {
@@ -313,9 +364,20 @@ export default {
     },
     inp: {
       props: ['item', 'field'],
-      template:`<input type='text' v-model='item[field.field]'>`
+      template:`<input v-el:inp type='text' v-model='item[field.field]' @blur='clear'>`,
+      methods: {
+        clear () {
+          this.$emit('clearedit')
+        }
+      },
+      ready() {
+        this.$nextTick(() => {
+          this.$els.inp&&this.$els.inp.focus()
+        })
+      }
     }
-  }
+  },
+  ready () {}
 }
 </script>
 
@@ -326,6 +388,7 @@ export default {
   display: flex;
   overflow: auto;
   user-select: none;
+  transition: .2s;
   * {
     flex-shrink: 0;
   }
@@ -341,9 +404,6 @@ export default {
     .content {
       padding-right: 100px;
       width: max-content;
-    }
-    .td {
-      background: #cac7c7;
     }
   }
   .head {
@@ -363,18 +423,40 @@ export default {
     display: flex;
     background: #fff;
     position: relative;
+    &.selectedRow {
+      .td {
+        background: #f7f9ff;
+      }
+    }
     .td {
       position: relative;
-      border: 1px solid #000;
+      border: 1px solid #ebebeb;
       box-sizing: border-box;
       overflow: hidden;
+      background: #fff;
       &:hover {
-        background: lightgray;
+        background: #e0e5f3;
       }
       &.first {
         width: 100px;
         text-align: center;
         cursor: pointer;
+      }
+      &.selected {
+        border: 2px solid #577eff;
+        background: #fff;
+      }
+      div {
+        width: 100%;
+        height: 100%;
+      }
+      input[type='text'] {
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        text-align: center;
       }
     }
   }
