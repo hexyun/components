@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:53:14
- * @LastEditTime: 2020-12-23 17:07:00
+ * @LastEditTime: 2020-12-23 18:39:30
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/src/components/custom_table/index.vue
@@ -25,7 +25,7 @@
             styX(idx, 'fixed'),
             {transition: moveXOnOff && startIdx !== idx ? '.2s' : 'none'}
           ]"
-          @mousedown="moveXDown($event, idx, 'fixed')">
+          @mousedown="moveXDown($event, idx, field,'fixed')">
           {{field.showname}}
           <span @mousedown.stop='resizeDown($event, field)'></span>
         </div>
@@ -35,11 +35,12 @@
           :class='{selectedRow:selectedData == item.id}'
           v-for='(idx, item) in data'
           :key='idx'
-          :style='[
-            {height: item.height + "px"},
-            styY(idx)
-          ]'>
-          <div class="td first" @mousedown="moveYDown($event, idx)" @click="selectRow(item)">
+          :style="[
+            {height: item.height + 'px'},
+            styY(idx),
+            {transition: moveYOnOff && startIdx !== idx ? '.2s' : 'none'}
+          ]">
+          <div class="td first" @mousedown="moveYDown($event, idx, item)" @click="selectRow(item)">
             <input type="checkbox" v-model='item.checked'>
             {{idx + 1}}
           </div>
@@ -77,7 +78,7 @@
             styX(idx, 'normal'),
             {transition: moveXOnOff && startIdx !== idx ? '.2s' : 'none'}
           ]"
-          @mousedown="moveXDown($event, idx, 'normal')">
+          @mousedown="moveXDown($event, idx, field,'normal')">
           {{field.showname}}
           <span @mousedown.stop='resizeDown($event, field)'></span>
         </div>
@@ -88,10 +89,11 @@
         :class='{selectedRow:selectedData == item.id}'
         v-for='(idx, item) in data'
         :key='idx'
-        :style='[
-          {height: item.height + "px"},
-          styY(idx)
-        ]'>
+        :style="[
+          {height: item.height + 'px'},
+          styY(idx),
+          {transition: moveYOnOff && startIdx !== idx ? '.2s' : 'none'}
+        ]">
           <div
             class="td"
             :class="{selected: selectedField == field.field && selectedData == item.id}"
@@ -155,13 +157,44 @@ export default {
     normal () {
       return this.fields.filter(field => !field.fixed && field.show)
     },
+    xFixedWidth () {
+      return this.fixed.map(item=>item.width)
+    },
+    xNormalWidth () {
+      return this.normal.map(item=>item.width)
+    },
     gapX () {
       if (!this.moveXOnOff) return 0
       return this.nowX - this.startX
     },
     nowIdx () {
       if (!this.gapX) return this.startIdx
-      return Math.min(Math.max(this.startIdx + Math.ceil(this.gapX / 100), 0), this[this.moveType].length - 1)
+      let n = this.startIdx
+      let step = 0
+      let total = 0
+      const xWidth = this.moveType === 'fixed' ? this.xFixedWidth : this.xNormalWidth
+      if (this.gapX > 0) {
+        for (let i=1;i<this[this.moveType].length - n;i++) {
+          total += xWidth[n + i]
+          if (this.gapX >= total - (xWidth[n + i] / 2)) {
+            step ++
+          } else {
+            break
+          }
+        }
+        n += step
+      } else {
+        for (let i=0;i<n;i++) {
+          total += xWidth[n - i -1]
+          if (-this.gapX >= total - (xWidth[n - i -1] /2)) {
+            step ++
+          } else {
+            break
+          }
+        }
+        n -= step
+      }
+      return Math.min(Math.max(n, 0), this[this.moveType].length - 1)
     },
     styX () {
       return (idx, type) => {
@@ -175,17 +208,20 @@ export default {
           }
           if (idx < this.startIdx && this.nowIdx <= idx) {
               return {
-                transform: `translateX(100px)`
+                transform: `translateX(${this.xWidth}px)`
               }
           }
           if (idx > this.startIdx && this.nowIdx >= idx) {
               return {
-                transform: `translateX(-100px)`
+                transform: `translateX(-${this.xWidth}px)`
               }
           }
         }
         return {}
       }
+    },
+    yHeightArr () {
+      return this.data.map(item=>item.height)
     },
     gapY () {
       if (!this.moveYOnOff) return 0
@@ -193,7 +229,31 @@ export default {
     },
     nowYIdx () {
       if (!this.gapY) return this.startIdx
-      return Math.min(Math.max(this.startIdx + Math.ceil(this.gapY / 30), 0), this.data.length - 1)
+      let n = this.startIdx
+      let step = 0
+      let total = 0
+      if (this.gapY > 0) {
+        for (let i = 1; i< this.data.length - n;i++) {
+          total += this.yHeightArr[n + i]
+          if (this.gapY >= total - (this.yHeightArr[n + i] / 2)) {
+            step ++
+          } else {
+            break
+          }
+        }
+        n += step
+      } else {
+        for (let i=0;i<n;i++) {
+          total += this.yHeightArr[n - i -1]
+          if (-this.gapY >= total - (this.yHeightArr[n - i -1] /2)) {
+            step ++
+          } else {
+            break
+          }
+        }
+        n -= step
+      }
+      return Math.min(Math.max(n, 0), this.data.length - 1)
     },
     styY () {
       return idx => {
@@ -206,12 +266,12 @@ export default {
         }
         if (idx < this.startIdx && this.nowYIdx <= idx) {
             return {
-              transform: `translateY(30px)`
+              transform: `translateY(${this.yHeight}px)`
             }
         }
         if (idx > this.startIdx && this.nowYIdx >= idx) {
             return {
-              transform: `translateY(-30px)`
+              transform: `translateY(-${this.yHeight}px)`
             }
         }
         return {}
@@ -227,12 +287,14 @@ export default {
       onoff: false,
       initWidth: 0,
       startX: 0,
+      xWidth: 0,
       nowX: 0,
       moveXOnOff: false,
       startIdx: null,
       moveType: null,
       moveYOnOff: false,
       startY: 0,
+      yHeight: 0,
       nowY: 0,
       selectedField: null,
       selectedData: null,
@@ -265,12 +327,13 @@ export default {
       this.startX = 0
       this.nowX = 0
     },
-    moveXDown(e, idx, type) {
+    moveXDown(e, idx, field,type) {
       this.startIdx = idx
       this.startX = e.x
       this.nowX = e.x
       this.moveXOnOff = true
       this.moveType = type
+      this.xWidth = field.width
       window.addEventListener('mousemove', this.moveXMove)
       window.addEventListener('mouseup', this.moveXUp)
     },
@@ -289,19 +352,24 @@ export default {
       this.nowX = 0
     },
     changeData () {
-      if (this.nowIdx !== this.startIdx) {
+      const now = this.nowIdx
+      if (now !== this.startIdx) {
         const idx = this.fields.findIndex(item=>item.field === this[this.moveType][this.startIdx].field)
-        const data = this.fields.splice(idx, 1)
-        console.log(this.nowIdx, this[this.moveType].length)
         const tar = this.fields.findIndex(item=>item.field === this[this.moveType][this.nowIdx].field)
-        this.fields.splice(tar, 0, data[0])
+        const data = this.fields.splice(idx, 1)
+        if (tar >= this.fields.length) {
+          this.fields.push(data[0])
+        } else {
+          this.fields.splice(tar, 0, data[0])
+        }
       }
     },
-    moveYDown (e, idx) {
+    moveYDown (e, idx, item) {
       this.startIdx = idx
       this.startY = e.y
       this.nowY = e.y
       this.moveYOnOff = true
+      this.yHeight = item.height
       window.addEventListener('mousemove', this.moveYMove)
       window.addEventListener('mouseup', this.moveYUp)
     },
@@ -319,9 +387,14 @@ export default {
       this.nowY = 0
     },
     changeYData () {
-      if (this.nowYIdx !== this.startIdx) {
+      const idx = this.nowYIdx
+      if (idx !== this.startIdx) {
         const data = this.data.splice(this.startIdx, 1)
-        this.data.splice(this.nowYIdx, 0, data[0])
+        if (idx >= this.data.length) {
+          this.data.push(data[0])
+        } else {
+          this.data.splice(idx, 0, data[0])
+        }
       }
     },
     componentClick (data, field) {

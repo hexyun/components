@@ -1,7 +1,7 @@
 <!--
  * @Author: yzf
  * @Date: 2020-12-21 10:52:25
- * @LastEditTime: 2020-12-23 17:06:03
+ * @LastEditTime: 2020-12-23 18:41:17
  * @LastEditors: yzf
  * @Description: 这是 文件
  * @FilePath: /alex/Volumes/project/hex/components/examples/routers/custom_table.vue
@@ -85,8 +85,8 @@ export default {
         type: 'text',
         editType: 'inp'
       }],
-      w: 600,
-      h: 300,
+      w: 1000,
+      h: 600,
       // test
       selected: [],
       onoff: false,
