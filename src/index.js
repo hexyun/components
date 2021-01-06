@@ -30,6 +30,7 @@ import datetimepicker from './components/datetimepicker/index.vue'
 import videorecorder from './components/videorecorder/index.vue'
 import photorecorder from './components/photorecorder/index.vue'
 import customtable from './components/custom_table/index.vue'
+import mobilecharts from './components/mobile_charts/index.vue'
 
 const Components = {
   navCate,
@@ -53,7 +54,8 @@ const Components = {
   datetimepicker,
   videorecorder,
   photorecorder,
-  customtable
+  customtable,
+  mobilecharts
 }
 
 const install = function (Vue, opts = {}) {

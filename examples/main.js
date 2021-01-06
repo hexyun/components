@@ -129,6 +129,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/custom_table.vue'], resolve)
     }
+  },
+  '/mobilecharts': {
+    component: function (resolve) {
+      require(['./routers/mobile_charts.vue'], resolve)
+    }
   }
 })
 
