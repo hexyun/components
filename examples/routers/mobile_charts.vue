@@ -2,11 +2,7 @@
   <div class="screen">
     <div class="content">
       <div class="wrap">
-        <mobilecharts
-          v-if="show"
-          :list="list"
-          :setting="setting"
-        ></mobilecharts>
+        <mobilecharts :list="list" :setting="setting"></mobilecharts>
       </div>
     </div>
   </div>
@@ -43,15 +39,14 @@ export default {
         height: 0,//高度
       }
       this.list = [
-        { x: 1608393600000, y: 4.0 },
-        { x: 1608825600000, y: 1.3 },
-        { x: 1609689600000, y: 1.0 },
-        { x: 1610121600000, y: 4.3 },
-        { x: 1610640000000, y: 5.2 },
-        { x: 1611417600000, y: 6.4 },
+        { x: 1563502923000, y: 4.0 },
+        { x: 1598059598000, y: 1.3 },
+        // { x: 1609689600000, y: 1.0 },
+        // { x: 1610121600000, y: 4.3 },
+        // { x: 1610640000000, y: 5.2 },
+        // { x: 1611417600000, y: 6.4 },
         { x: 1612627200000, y: 4 }
-      ]
-      this.show = true;
+      ];
     }, 2000);
   },
   watch: {},
