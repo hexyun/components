@@ -173,9 +173,22 @@ export default {
     }
   },
   ready() {
-    // this.showChart();
     this.initChart();
-    console.log(this.setting)
+    // console.log(this.setting)
+  },
+  watch: {
+    list: {
+      immediate: true,
+      handler(n) {
+        this.chart && this.initChart();
+      },
+    },
+    setting: {
+      immediate: true,
+      handler(n) {
+        this.chart && this.initChart();
+      },
+    },
   },
 };
 </script>
