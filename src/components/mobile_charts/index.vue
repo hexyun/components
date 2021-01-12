@@ -24,7 +24,9 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      max: 0,
+      min: 0,
     };
   },
   methods: {
@@ -34,11 +36,12 @@ export default {
         this.chart.destroy();
       };
       // 初始化 Highcharts 图表
-      this.$el.style.width = (this.setting.width || 400) + 'px';
-      this.$el.style.height = (this.setting.height || 400) + 'px';
+      this.$el.style.width = (this.setting.width || 134) + 'px';
+      this.$el.style.height = (this.setting.height || 200) + 'px';
       var formatData = this.list.map(item => {
         return {
-          ...item,
+          // ...item,
+          y: item.y,
           dataLabels: { color: this.judgeColor(item.y) },
           marker: {
             enabled: true,
@@ -68,21 +71,42 @@ export default {
           enabled: false
         },
         xAxis: {
+          // tickPositions: this.list.map((item) => {
+          //   return new Date(item.x).toLocaleDateString()
+          // }),
           lineWidth: 1,
           lineColor: '#AEB5BE',
-          type: 'datetime',
-          dateTimeLabelFormats: {
-            millisecond: '%H:%M:%S.%L',
-            second: '%H:%M:%S',
-            minute: '%H:%M',
-            hour: '%H:%M',
-            day: '%Y/%m/%d',
-            week: '%Y/%m/%d',
-            month: '%Y/%m',
-            year: '%Y'
-          }
+          categories: this.list.map((item) => {
+            var str = new Date(Number(item.x)).toLocaleDateString();
+            var tooMany = (Number(this.setting.width) - 20) < this.list.length * 44
+            return this.setting.width && tooMany ? str : str.substring(5) + '<br/>' + str.substring(0, 4)
+          }),
+          // type: 'category',
+          // type: 'datetime',
+          // dateTimeLabelFormats: {
+          //   millisecond: '%H:%M:%S.%L',
+          //   second: '%H:%M:%S',
+          //   minute: '%H:%M',
+          //   hour: '%H:%M',
+          //   day: '%m/%d<br/>%Y',
+          //   week: '%m/%d<br/>%Y',
+          //   month: '%m/%d<br/>%Y',
+          //   year: '%m/%d<br/>%Y'
+          // },
+          // label: {
+          //   formatter: function () {
+          //     console.log(this.value, this.x, this.point)
+          //   }
+          // }
+          // tickPositioner: () => {
+          //   return this.list.map((item) => {
+          //     // return item.x
+          //     return new Date(item.x).toLocaleDateString()
+          //   })
+          // },
         },
         yAxis: {
+          tickPositions: this.yArr(this.list),
           visible: true,
           lineWidth: 1,
           lineColor: '#AEB5BE',
@@ -109,7 +133,7 @@ export default {
             width: 1
           }],
           plotBands: [{
-            from: 0,
+            from: this.ymin,
             to: this.setting.min,
             color: 'rgba(0, 0, 0, 0)',
             label: {
@@ -124,16 +148,17 @@ export default {
             to: this.setting.max,
             color: 'rgba(0, 0, 0, 0)',
             label: {
-              text: '<p>正常</p><p>' + this.setting.min + '-' + this.setting.max + '</p>',
+              text: '正常<br/>' + this.setting.min + '-' + this.setting.max,
               useHTML: true,
               style: {
                 color: '#00A34E',
                 opacity: 0.33
-              }
+              },
+              y: -5
             }
           }, {
             from: this.setting.max,
-            to: 10000,
+            to: this.ymax,
             color: 'rgba(0, 0, 0, 0)',
             label: {
               text: '偏高',
@@ -155,6 +180,11 @@ export default {
         series: [{
           dashStyle: 'ShortDash',
           data: formatData,
+          // dataLabels: {
+          //   formatter: function () {
+          //     return new Date(Number(this.x)).toLocaleDateString()
+          //   }
+          // },
           showInLegend: false
         }],
         credits: {
@@ -170,6 +200,21 @@ export default {
       var value = (Number(val) > Number(this.setting.min)) && (Number(val) < Number(this.setting.max));
       // console.log('value', value, val, Number(val) > Number(this.setting.min),)
       return value ? '#00A34E' : '#E1140A'
+    },
+    yArr(list, ind) {
+      if (!list.length) return;
+      var ymin, ymax, settingMin, settingMax, zmin, zmax;
+      var arr = list.map((t) => {
+        return Number(t.y)
+      })
+      ymin = Math.min.apply(null, arr),
+        ymax = Math.max.apply(null, arr),
+        settingMin = Number(this.setting.min),
+        settingMax = Number(this.setting.max),
+        zmin = Math.min.apply(null, [ymin, 1.66 * settingMin - 0.66 * settingMax]),
+        zmax = Math.max.apply(null, [ymin, 1.66 * settingMax - 0.66 * settingMin]);
+      this.ymin = zmin, this.ymax = zmax;
+      return [zmin, settingMin, settingMax, zmax]
     }
   },
   ready() {
