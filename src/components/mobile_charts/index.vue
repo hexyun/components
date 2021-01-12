@@ -34,8 +34,8 @@ export default {
         this.chart.destroy();
       };
       // 初始化 Highcharts 图表
-      this.$el.style.width = (this.setting.width || 150) + 'px';
-      this.$el.style.height = (this.setting.height || 200) + 'px';
+      this.$el.style.width = (this.setting.width || 400) + 'px';
+      this.$el.style.height = (this.setting.height || 400) + 'px';
       var formatData = this.list.map(item => {
         return {
           ...item,
@@ -76,10 +76,10 @@ export default {
             second: '%H:%M:%S',
             minute: '%H:%M',
             hour: '%H:%M',
-            day: '%m/%d<br/>%Y',
-            week: '%m/%d<br/>%Y',
-            month: '%m/%d<br/>%Y',
-            year: '%m/%d<br/>%Y'
+            day: '%Y/%m/%d',
+            week: '%Y/%m/%d',
+            month: '%Y/%m',
+            year: '%Y'
           }
         },
         yAxis: {
@@ -173,22 +173,9 @@ export default {
     }
   },
   ready() {
+    // this.showChart();
     this.initChart();
-    // console.log(this.setting)
-  },
-  watch: {
-    list: {
-      immediate: true,
-      handler(n) {
-        this.chart && this.initChart();
-      },
-    },
-    setting: {
-      immediate: true,
-      handler(n) {
-        this.chart && this.initChart();
-      },
-    },
+    console.log(this.setting)
   },
 };
 </script>
