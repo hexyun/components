@@ -212,7 +212,7 @@ export default {
         settingMin = Number(this.setting.min),
         settingMax = Number(this.setting.max),
         zmin = Math.min.apply(null, [ymin, 1.66 * settingMin - 0.66 * settingMax]),
-        zmax = Math.max.apply(null, [ymin, 1.66 * settingMax - 0.66 * settingMin]);
+        zmax = Math.max.apply(null, [ymax, 1.66 * settingMax - 0.66 * settingMin]);
       this.ymin = zmin, this.ymax = zmax;
       return [zmin, settingMin, settingMax, zmax]
     }
