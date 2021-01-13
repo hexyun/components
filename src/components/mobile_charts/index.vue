@@ -107,6 +107,12 @@ export default {
         },
         yAxis: {
           tickPositions: this.yArr(this.list),
+          breaks: [{
+            repeat: 0,
+            from: Number(this.setting.max),
+            to: this.ymax,
+            breakSize: 2.33
+          }],
           visible: true,
           lineWidth: 1,
           lineColor: '#AEB5BE',
