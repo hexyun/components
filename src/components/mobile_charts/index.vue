@@ -27,6 +27,10 @@ export default {
       chart: null,
       max: 0,
       min: 0,
+      sourceArr: [],
+      lowArr: [],
+      middleArr: [],
+      highArr: []
     };
   },
   methods: {
@@ -108,10 +112,19 @@ export default {
         yAxis: {
           tickPositions: this.yArr(this.list),
           breaks: [{
-            repeat: 0,
-            from: Number(this.setting.max),
+            from: Number(this.setting.max) + 2,
             to: this.ymax,
-            breakSize: 2.33
+            breakSize: 1.33,
+          },
+          {
+            from: Number(this.setting.min) + 1,
+            to: Number(this.setting.max) - 1,
+            breakSize: 3,
+          },
+          {
+            from: this.ymin + 2,
+            to: Number(this.setting.min),
+            breakSize: 1.33,
           }],
           visible: true,
           lineWidth: 1,
@@ -203,13 +216,13 @@ export default {
       }, 0);
     },
     judgeColor(val) {
-      var value = (Number(val) > Number(this.setting.min)) && (Number(val) < Number(this.setting.max));
+      var value = (Number(val) >= Number(this.setting.min)) && (Number(val) <= Number(this.setting.max));
       // console.log('value', value, val, Number(val) > Number(this.setting.min),)
       return value ? '#00A34E' : '#E1140A'
     },
     yArr(list, ind) {
       if (!list.length) return;
-      var ymin, ymax, settingMin, settingMax, zmin, zmax;
+      var ymin, ymax, settingMin, settingMax, zmin, zmax, minN;
       var arr = list.map((t) => {
         return Number(t.y)
       })
@@ -219,9 +232,9 @@ export default {
         settingMax = Number(this.setting.max),
         zmin = Math.min.apply(null, [ymin, 1.66 * settingMin - 0.66 * settingMax]),
         zmax = Math.max.apply(null, [ymax, 1.66 * settingMax - 0.66 * settingMin]);
-      this.ymin = zmin, this.ymax = zmax;
+      this.ymin = zmin, this.ymax = zmax, this.sourceArr = arr;
       return [zmin, settingMin, settingMax, zmax]
-    }
+    },
   },
   ready() {
     this.initChart();
