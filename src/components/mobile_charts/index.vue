@@ -232,15 +232,16 @@ export default {
         breakSize: 3,
       },
       {
-        from: Number(this.setting.min) + 0.5,
-        to: Number(this.setting.max) - 0.5,
-        breakSize: 4,
+        from: Number(this.setting.min) + 0.3,
+        to: Number(this.setting.max) - 0.3,
+        breakSize: 4.4,
       },
       {
         from: calcArr[1] + 0.33,
         to: Number(this.setting.min),
         breakSize: 3,
       }];
+      this.highArr = [], this.middleArr = [], this.lowArr = [];
       var arr = list.map(t => {
         return t.y
       }).sort((a, b) => {
@@ -257,7 +258,7 @@ export default {
       });
       this.breakOptions = [
         ...this.setPiece(calcArr[0], this.setting.max + 0.33, 3, [...new Set(this.highArr)], 0, defaultbreak),
-        ...this.setPiece(this.setting.max - 0.5, this.setting.min + 0.5, 4, [...new Set(this.middleArr)], 1, defaultbreak),
+        ...this.setPiece(this.setting.max, this.setting.min, 5, [...new Set(this.middleArr)], 1, defaultbreak),
         ...this.setPiece(this.setting.min, calcArr[1] + 0.33, 3, [...new Set(this.lowArr)], 2, defaultbreak),
       ]
       var d = this.breakOptions
@@ -270,36 +271,37 @@ export default {
           {
             from: min,
             to: arr[0] - 0.1,
-            breakSize: (num - 1.5) / 3,
+            breakSize: (num - 0.6) / 3,
           },
           {
-            from: arr[0] + 0.65,
+            from: arr[0] + 0.2,
             to: arr[1] - 0.1,
-            breakSize: (num - 1.5) / 3,
+            breakSize: (num - 0.6) / 3,
           },
           {
-            from: arr[1] + 0.65,
+            from: arr[1] + 0.2,
             to: max,
-            breakSize: (num - 1.5) / 3,
+            breakSize: (num - 0.6) / 3,
           },
         ];
         case 2: return [
           {
             from: min,
             to: arr[0] - 0.1,
-            breakSize: (num - 1) / 2,
+            breakSize: (num - 0.3) / 2,
           },
           {
-            from: arr[0] + 0.9,
+            from: arr[0] + 0.2,
             to: max,
-            breakSize: (num - 1) / 2,
+            breakSize: (num - 0.3) / 2,
           },
         ];
-        case 1: return [{
-          from: min + (arr[0] - min) / (max - min) * (type === 1 ? 3 : 2),
-          to: max - (max - arr[0]) / (max - min) * (type === 1 ? 3 : 2),
-          breakSize: 1,
-        }];
+        case 1:
+          return [{
+            from: min + (arr[0] - min) / (max - min) * 1,
+            to: max - (max - arr[0]) / (max - min) * 1,
+            breakSize: (num - 1)
+          }];
         default: return [defaultbreak[type]];
       }
     },
