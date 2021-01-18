@@ -112,19 +112,19 @@ export default {
         yAxis: {
           tickPositions: this.yArr(this.list),
           breaks: [{
-            from: Number(this.setting.max) + 2,
+            from: Number(this.setting.max) + 0.33,
             to: this.ymax,
-            breakSize: 1.33,
-          },
-          {
-            from: Number(this.setting.min) + 1,
-            to: Number(this.setting.max) - 1,
             breakSize: 3,
           },
           {
-            from: this.ymin + 2,
+            from: Number(this.setting.min) + 0.5,
+            to: Number(this.setting.max) - 0.5,
+            breakSize: 4,
+          },
+          {
+            from: this.ymin + 0.33,
             to: Number(this.setting.min),
-            breakSize: 1.33,
+            breakSize: 3,
           }],
           visible: true,
           lineWidth: 1,
