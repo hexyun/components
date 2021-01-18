@@ -30,7 +30,9 @@ export default {
       sourceArr: [],
       lowArr: [],
       middleArr: [],
-      highArr: []
+      highArr: [],
+      calcArr: [],
+      breakOptions: []
     };
   },
   methods: {
@@ -111,21 +113,7 @@ export default {
         },
         yAxis: {
           tickPositions: this.yArr(this.list),
-          breaks: [{
-            from: Number(this.setting.max) + 0.33,
-            to: this.ymax,
-            breakSize: 3,
-          },
-          {
-            from: Number(this.setting.min) + 0.5,
-            to: Number(this.setting.max) - 0.5,
-            breakSize: 4,
-          },
-          {
-            from: this.ymin + 0.33,
-            to: Number(this.setting.min),
-            breakSize: 3,
-          }],
+          breaks: this.breakOptions,
           visible: true,
           lineWidth: 1,
           lineColor: '#AEB5BE',
@@ -211,9 +199,9 @@ export default {
         },
       }
       this.chart = new Highcharts.Chart(this.$el, options);
-      setTimeout(() => {
-        this.chart.setSize();
-      }, 0);
+      // setTimeout(() => {
+      //   this.chart.setSize();
+      // }, 0);
     },
     judgeColor(val) {
       var value = (Number(val) >= Number(this.setting.min)) && (Number(val) <= Number(this.setting.max));
@@ -232,8 +220,88 @@ export default {
         settingMax = Number(this.setting.max),
         zmin = Math.min.apply(null, [ymin, 1.66 * settingMin - 0.66 * settingMax]),
         zmax = Math.max.apply(null, [ymax, 1.66 * settingMax - 0.66 * settingMin]);
-      this.ymin = zmin, this.ymax = zmax, this.sourceArr = arr;
+      this.ymin = zmin, this.ymax = zmax, this.sourceArr = arr, this.calcArr = [zmax, zmin];
+      this.formatBreak(this.list, this.calcArr)
       return [zmin, settingMin, settingMax, zmax]
+    },
+    formatBreak(list, calcArr) {
+      if (!calcArr.length) return
+      var defaultbreak = [{
+        from: Number(this.setting.max) + 0.33,
+        to: calcArr[0],
+        breakSize: 3,
+      },
+      {
+        from: Number(this.setting.min) + 0.5,
+        to: Number(this.setting.max) - 0.5,
+        breakSize: 4,
+      },
+      {
+        from: calcArr[1] + 0.33,
+        to: Number(this.setting.min),
+        breakSize: 3,
+      }];
+      var arr = list.map(t => {
+        return t.y
+      }).sort((a, b) => {
+        return a - b
+      })
+      arr.forEach(t => {
+        if (t > this.setting.max) {
+          this.highArr.push(t)
+        } else if (t < this.setting.min) {
+          this.lowArr.push(t)
+        } else {
+          this.middleArr.push(t)
+        }
+      });
+      this.breakOptions = [
+        ...this.setPiece(calcArr[0], this.setting.max + 0.33, 3, [...new Set(this.highArr)], 0, defaultbreak),
+        ...this.setPiece(this.setting.max - 0.5, this.setting.min + 0.5, 4, [...new Set(this.middleArr)], 1, defaultbreak),
+        ...this.setPiece(this.setting.min, calcArr[1] + 0.33, 3, [...new Set(this.lowArr)], 2, defaultbreak),
+      ]
+      var d = this.breakOptions
+      return this.breakOptions
+
+    },
+    setPiece(max, min, num, arr, type, defaultbreak) {
+      switch (arr.length) {
+        case 3: return [
+          {
+            from: min,
+            to: arr[0] - 0.1,
+            breakSize: (num - 1.5) / 3,
+          },
+          {
+            from: arr[0] + 0.65,
+            to: arr[1] - 0.1,
+            breakSize: (num - 1.5) / 3,
+          },
+          {
+            from: arr[1] + 0.65,
+            to: max,
+            breakSize: (num - 1.5) / 3,
+          },
+        ];
+        case 2: return [
+          {
+            from: min,
+            to: arr[0] - 0.1,
+            breakSize: (num - 1) / 2,
+          },
+          {
+            from: arr[0] + 0.9,
+            to: max,
+            breakSize: (num - 1) / 2,
+          },
+        ];
+        case 1: return [{
+          from: min + (arr[0] - min) / (max - min) * (type === 1 ? 3 : 2),
+          to: max - (max - arr[0]) / (max - min) * (type === 1 ? 3 : 2),
+          breakSize: 1,
+        }];
+        default: return [defaultbreak[type]];
+      }
     },
   },
   ready() {
@@ -253,6 +321,9 @@ export default {
         this.chart && this.initChart();
       },
     },
+    breakOptions() {
+      this.chart.redraw();
+    }
   },
 };
 </script>
