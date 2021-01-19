@@ -199,9 +199,9 @@ export default {
         },
       }
       this.chart = new Highcharts.Chart(this.$el, options);
-      // setTimeout(() => {
-      //   this.chart.setSize();
-      // }, 0);
+      setTimeout(() => {
+        this.chart.setSize();
+      }, 0);
     },
     judgeColor(val) {
       var value = (Number(val) >= Number(this.setting.min)) && (Number(val) <= Number(this.setting.max));
@@ -227,19 +227,19 @@ export default {
     formatBreak(list, calcArr) {
       if (!calcArr.length) return
       var defaultbreak = [{
-        from: Number(this.setting.max) + 0.33,
+        from: Number(this.setting.max) + 0.01,
         to: calcArr[0],
-        breakSize: 3,
+        breakSize: 3.32,
       },
       {
-        from: Number(this.setting.min) + 0.3,
-        to: Number(this.setting.max) - 0.3,
-        breakSize: 4.4,
+        from: Number(this.setting.min) + 0.01,
+        to: Number(this.setting.max) - 0.01,
+        breakSize: 4.98,
       },
       {
-        from: calcArr[1] + 0.33,
+        from: calcArr[1] + 0.01,
         to: Number(this.setting.min),
-        breakSize: 3,
+        breakSize: 3.32,
       }];
       this.highArr = [], this.middleArr = [], this.lowArr = [];
       var arr = list.map(t => {
@@ -257,54 +257,47 @@ export default {
         }
       });
       this.breakOptions = [
-        ...this.setPiece(calcArr[0], this.setting.max + 0.33, 3, [...new Set(this.highArr)], 0, defaultbreak),
+        ...this.setPiece(calcArr[0], this.setting.max, 3.33, [...new Set(this.highArr)], 0, defaultbreak),
         ...this.setPiece(this.setting.max, this.setting.min, 5, [...new Set(this.middleArr)], 1, defaultbreak),
-        ...this.setPiece(this.setting.min, calcArr[1] + 0.33, 3, [...new Set(this.lowArr)], 2, defaultbreak),
+        ...this.setPiece(this.setting.min, calcArr[1], 3.33, [...new Set(this.lowArr)], 2, defaultbreak),
       ]
-      var d = this.breakOptions
+      var d = this.breakOptions;
+      // var d = [{ "from": 10.00007, "to": 79.99993, "breakSize": 1.6648800000000001 }, { "from": 80.00005, "to": 129.99995, "breakSize": 1.6648800000000001 }, { "from": 5.000005, "to": 9.999995, "breakSize": 4.99999 }, { "from": 0.000005, "to": 4.999995, "breakSize": 3.32999 }]
       return this.breakOptions
 
     },
     setPiece(max, min, num, arr, type, defaultbreak) {
-      switch (arr.length) {
-        case 3: return [
-          {
-            from: min,
-            to: arr[0] - 0.1,
-            breakSize: (num - 0.6) / 3,
-          },
-          {
-            from: arr[0] + 0.2,
-            to: arr[1] - 0.1,
-            breakSize: (num - 0.6) / 3,
-          },
-          {
-            from: arr[1] + 0.2,
-            to: max,
-            breakSize: (num - 0.6) / 3,
-          },
-        ];
-        case 2: return [
-          {
-            from: min,
-            to: arr[0] - 0.1,
-            breakSize: (num - 0.3) / 2,
-          },
-          {
-            from: arr[0] + 0.2,
-            to: max,
-            breakSize: (num - 0.3) / 2,
-          },
-        ];
-        case 1:
-          return [{
-            from: min + (arr[0] - min) / (max - min) * 1,
-            to: max - (max - arr[0]) / (max - min) * 1,
-            breakSize: (num - 1)
-          }];
-        default: return [defaultbreak[type]];
-      }
+      var sortArr = [...new Set([min, ...arr, max])];
+      sortArr.map(t => { return Number(t) })
+      return this.getPiece(sortArr, num, max);
+      // switch (sortArr.length) {
+      //   case 5: this.getPiece(sortArr, num);
+      //   case 4: this.getPiece(sortArr, num);
+      //   case 3: this.getPiece(sortArr, num);
+      //   default:
+      //     // return [defaultbreak[type]];
+      //     return [{
+      //       from: min + 0.01,
+      //       to: max - 0.01,
+      //       breakSize: (num - 0.02)
+      //     }];
+      // }
     },
+    getPiece(arr, num, max) {
+      var newArr = [], sortArr = arr.map(t => {
+        return Number(t)
+      });
+      for (var a = 0, b = 1;b < sortArr.length;a++, b++) {
+        newArr.push({
+          // from: sortArr[a] + (sortArr[b] - sortArr[a]) / 1000000 + (sortArr[b] === max ? 0.33 : 0),
+          from: sortArr[a] + (sortArr[b] - sortArr[a]) / 1000000,
+          to: sortArr[b] - (sortArr[b] - sortArr[a]) / 1000000,
+          breakSize: (num - 2 * (sortArr[sortArr.length - 1] - sortArr[0]) / 1000000) / (sortArr.length - 1),
+          // breakSize: (num - 2 * (sortArr[sortArr.length - 1] - sortArr[0]) / 1000000) / (sortArr.length) * (sortArr[b] === max ? 2 : 1),
+        })
+      }
+      return newArr
+    }
   },
   ready() {
     this.initChart();
