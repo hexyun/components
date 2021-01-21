@@ -31,7 +31,7 @@ import videorecorder from './components/videorecorder/index.vue'
 import photorecorder from './components/photorecorder/index.vue'
 import customtable from './components/custom_table/index.vue'
 import mobilecharts from './components/mobile_charts/index.vue'
-
+import pasteinput from './components/paste_input/index.vue'
 const Components = {
   navCate,
   waterfall,
@@ -55,7 +55,8 @@ const Components = {
   videorecorder,
   photorecorder,
   customtable,
-  mobilecharts
+  mobilecharts,
+  pasteinput
 }
 
 const install = function (Vue, opts = {}) {

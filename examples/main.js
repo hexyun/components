@@ -134,6 +134,11 @@ router.map({
     component: function (resolve) {
       require(['./routers/mobile_charts.vue'], resolve)
     }
+  },
+  '/pasteinput': {
+    component: function (resolve) {
+      require(['./routers/paste_input.vue'], resolve)
+    }
   }
 })
 
