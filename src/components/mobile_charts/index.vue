@@ -83,7 +83,13 @@ export default {
           lineWidth: 1,
           lineColor: '#AEB5BE',
           categories: this.list.map((item) => {
-            var str = new Date(Number(item.x)).toLocaleDateString();
+            // var str = new Date(Number(item.x)).toLocaleDateString();
+            // var date = new Date(Number(item.x));
+            // var year = date.getFullYear();
+            // var month = date.getMonth() + 1;
+            // var date1 = date.getDate();
+            // var str = year + '/' + month + '/' + date1;
+            var str = item.x;
             var tooMany = (Number(this.setting.width) - 20) < this.list.length * 44
             return this.setting.width && tooMany ? str : str.substring(5) + '<br/>' + str.substring(0, 4)
           }),
